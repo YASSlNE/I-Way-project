@@ -16,7 +16,7 @@ export class DashboardComponent implements OnInit {
 
 
 
-
+  loading: boolean = false;
   
   generatedCode: string = '';
   componentName: string = '';
@@ -34,13 +34,7 @@ export class DashboardComponent implements OnInit {
     theme: 'vs-dark', // vs, vs-dark, hc-black
     automaticLayout: true,
   };
-  code = this.getCode();
-  getCode() {
-    return (
-      '<html><!-- // !!! Tokens can be inspected using F1 > Developer: Inspect Tokens !!! -->\n<head>\n	<!-- HTML comment -->\n	<style type="text/css">\n		/* CSS comment */\n	</style>\n	<script type="javascript">\n		// JavaScript comment\n	</' +
-      'script>\n</head>\n<body></body>\n</html>'
-    );
-  }
+
 
   ngOnInit() {}
 
@@ -57,7 +51,32 @@ export class DashboardComponent implements OnInit {
   }
 
 
+
+  switchEditorLanguage(language: string) {
+    switch (language) {
+      case 'html':
+        this.editorOptions.language = 'html';
+        break;
+      case 'typescript':
+        this.editorOptions.language = 'typescript';
+        break;
+      case 'css':
+        this.editorOptions.language = 'css';
+        break;
+      case 'spec':
+        this.editorOptions.language = 'typescript';
+        break;
+      default:
+        this.editorOptions.language = 'html';
+    }
+    this.generateCode();
+  }
+
+
   generateCode() {
+
+    this.loading = true;
+
     let elementsArray = "";
   
     let inputElement = `
@@ -82,13 +101,25 @@ export class DashboardComponent implements OnInit {
       }
     }
   
-    let code = `
+    // let code = `
+    //   <form id="form" action="#" class="space-y-8">
+    //     ${elementsArray}
+    //   </form>`;
+
+      let code = `
       <form id="form" action="#" class="space-y-8">
         ${elementsArray}
       </form>`;
+
+      setTimeout(() => {
+        
+        this.generatedCode = code;
+        this.loading = false; // Set the loading state to false when code generation is complete
+      }, 1000);
+    }
     
     
-  }
+  
   
 
 

@@ -1,0 +1,145 @@
+<div class="container mx-auto px-4 h-full">
+  <div class="flex content-center items-center justify-center h-full">
+    <div class="w-full lg:w-6/12 px-4">
+      <div class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-gray-200 border-0">
+        <div class="flex-auto px-4 lg:px-10 py-10 pt-6">
+          <div *ngIf="isLoggedIn">
+            <p class="text-center my-4">
+              You are already logged in as <b>{{ this.loggedInUser }}</b>.
+              <br />
+              <a href="/">Click here to go to the home page</a>.
+            </p>
+          </div>
+
+          <form
+            *ngIf="!isLoading && !isSuccessful && !isLoggedIn"
+            name="form"
+            (ngSubmit)="f.form.valid && onSubmit()"
+            #f="ngForm"
+            novalidate
+          >
+          <div class="relative w-full mb-3">
+            <label
+              class="block uppercase text-slate-600 text-xs font-bold mb-2"
+              for="email"
+            >
+              Email
+            </label>
+            <input
+              id="email"
+              name="email"
+              type="text"
+              class="border-0 px-3 py-3 placeholder-blueGray-300 text-slate-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+              placeholder="Email"
+              [(ngModel)] = "form.email"
+              required
+              #email="ngModel"
+              [ngClass]="{ 'is-invalid': f.submitted && email.errors }"    
+            />
+          </div>
+
+          <div class="relative w-full mb-3">
+            <label
+              class="block uppercase text-slate-600 text-xs font-bold mb-2"
+              for="username"
+            >
+              Username
+            </label>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              [(ngModel)]="form.username"
+              required
+              minlength="3"
+              maxlength="20"
+              #username="ngModel"
+              [ngClass]="{ 'is-invalid': f.submitted && username.errors }"    
+              class="border-0 px-3 py-3 placeholder-blueGray-300 text-slate-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+              placeholder="Username"
+            />
+          </div>
+
+          <div class="relative w-full mb-3">
+            <label
+              class="block uppercase text-slate-600 text-xs font-bold mb-2"
+              for="password"
+            >
+              Password
+            </label>
+            <input
+              id="password"
+              name="password"
+              [(ngModel)]="form.password"
+              required
+              minlength="6"
+              #password="ngModel"
+              [ngClass]="{ 'is-invalid': f.submitted && password.errors }"  
+              [type]="isVisible ? 'text' : 'password'"
+              class="border-0 px-3 py-3 placeholder-blueGray-300 text-slate-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+              placeholder="Password"
+            >
+            <div style="position:absolute;top:50%;right:0%" class="mr-2 mb-10">
+              <i
+                class="fas text-slate-500 cursor-pointer"
+                [class]="isVisible? 'fa-eye' :'fa-eye-slash' "
+                (click)="unHidePassword()"
+                ></i>
+              
+            </div>
+          </div>
+          
+
+
+
+
+
+
+
+
+            <div class="text-center mt-6">
+
+
+              <button
+              [disabled] = "isLoading"
+                class="bg-gray-800 text-white active:bg-blueGray-600 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full ease-linear transition-all duration-150"
+              >
+                {{isLoading ? 'Loading...' : 'Create Account'}}
+              </button>
+            </div>
+
+
+
+
+
+
+
+
+          </form>
+
+          <!-- "Already has an account?" button -->
+          <div class="text-center mt-4" *ngIf="(!isLoggedIn && !isLoading)">
+            <a [routerLink]="['/auth/login']">
+              <button
+                class="text-slate-500 font-normal text-sm underline"
+                type="button"
+              >
+                Already has an account? Log in instead
+              </button>
+            </a>
+          </div>
+
+          <div class="mt-4 flex flex-col items-center" *ngIf="(!isLoggedIn && isLoading)">
+            <img src="/assets/img/spinner.gif" width="50" height="50" alt="Loading..." />
+            <div class="mt-2">
+              <p>Loading...</p>
+            </div>
+          </div>
+          
+          
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

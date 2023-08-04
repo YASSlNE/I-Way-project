@@ -12,13 +12,13 @@ import {
   styleUrls: ['./dashboard.component.css'],
 })
 export class DashboardComponent implements OnInit {
-  constructor(private monacoLoader: MonacoEditorLoaderService) {} // Inject MonacoEditorLoaderService
+  constructor(private monacoLoader: MonacoEditorLoaderService) {}
 
   editorOptions: MonacoEditorConstructionOptions = {
     language: 'html',
     theme: 'vs-dark',
     automaticLayout: true,
-    
+    readOnly: true,
   };
 
   editorOverrideOptions: monaco.editor.IEditorOverrideServices = {
@@ -34,7 +34,9 @@ export class DashboardComponent implements OnInit {
   };
 
 
-
+  toggleWhiteSpace: boolean = false;
+  componentSelectorName : string = '';
+  componentClassName : string = '';
   loading: boolean = false;
   elementsArray = '';
   generatedCode: string = '';
@@ -53,6 +55,16 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {}
 
 
+  transformComponentName(componentName: string) {
+    const componentWords = componentName.split(' ');
+    const componentSelectorName = componentWords.join('-').toLowerCase();
+    const componentClassName = componentWords
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join('');
+
+      this.componentClassName = componentClassName;
+      this.componentSelectorName = componentSelectorName;
+  }
 
 
   addFormElement() {
@@ -68,6 +80,14 @@ export class DashboardComponent implements OnInit {
   }
 
   switchEditorLanguage(language: string) {
+
+
+
+
+
+
+
+
     this.selectedLanguage = language;
     switch (language) {
       case 'html':
@@ -97,114 +117,157 @@ export class DashboardComponent implements OnInit {
     switch (language) {
       case 'html':
         this.generatedCode = `
-          <form id="form" action="#" class="space-y-8">
-            ${this.elementsArray}
-          </form>
+<!-- ... ${this.componentSelectorName}.html ... -->
+
+
+<form id="form" action="#" class="space-y-8">
+  ${this.elementsArray}
+</form>
         `;
         break;
       case 'typescript':
         this.generatedCode = `
-export class FormComponent {
-  formElements: any[] = [];
-  
-  constructor() {
-    this.formElements = [
-      {
-                  type: "input",
-                  name: "name",
-                  validator: "",
-                },
-              ];
-            }
-          }
+//${this.componentSelectorName}.component.ts
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-${this.componentSelectorName}',
+  templateUrl: './${this.componentSelectorName}.component.html',
+  styleUrls: ['./${this.componentSelectorName}.component.css']
+})
+export class ${this.componentClassName}Component {
+
+}
+
         `;
         break;
       case 'css':
         this.generatedCode = `
-          form {
-            width: 500px;
-            margin: 0 auto;
-          }
-  
-          label {
-            font-size: 16px;
-            margin-bottom: 10px;
-          }
-  
-          input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-          }
+/* ${this.componentSelectorName}.component.css */
         `;
         break;
       case 'spec':
         this.generatedCode = `
-          import { Component } from '@angular/core';
-          import { FormBuilder } from '@angular/forms';
-  
-          @Component({
-            selector: 'app-form',
-            templateUrl: './form.component.html',
-            styleUrls: ['./form.component.css']
-          })
-          export class FormComponent {
-            formElements: any[] = [];
-  
-            constructor(private fb: FormBuilder) {
-              this.formElements = [
-                {
-                  type: "input",
-                  name: "name",
-                  validator: "",
-                },
-              ];
-            }
-  
-            onSubmit() {
-              // Do something with the form data
-            }
-          }
+//${this.componentSelectorName}.component.spec.ts
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+
+import { ${this.componentClassName}Component } from './${this.componentSelectorName}.component';
+
+describe('${this.componentClassName}Component', () => {
+  let component: ${this.componentClassName}Component;
+  let fixture: ComponentFixture<${this.componentClassName}Component>;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      declarations: [${this.componentClassName}Component]
+    });
+    fixture = TestBed.createComponent(${this.componentClassName}Component);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});                             
+
         `;
         break;
     }
   }
 
   generateCode() {
+    this.elementsArray = '';
+
+    this.toggleWhiteSpace = true;
+
+
     this.loading = true;
 
-    let inputElement = `
-      <div>
-        <label for="{elementName}" class="block mb-2 text-sm font-medium text-gray-900">
-          {elementName}
-        </label>
-        <input type="text" id="{elementName}" name="{elementName}" 
-          class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
-          focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        >
-      </div>
-    `;
 
-    for (let element of this.formElements) {
-      switch (element.type) {
-        case 'input':
-          let elementCode = inputElement.replace(
-            /{elementName}/g,
-            element.name
-          );
-          this.elementsArray += elementCode; // Append the generated code to the elementsArray
-          break;
-        // Add more cases for other types of form elements if needed
+    setTimeout(()=>{
+
+      this.transformComponentName(this.componentName);
+
+
+      let inputElement = `
+  <div>
+    <label for="{elementName}" class="block mb-2 text-sm font-medium text-gray-900">
+      {elementName}
+    </label>
+    <input type="text" id="{elementName}" name="{elementName}"
+      class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
+      focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+    >
+  </div>
+      `;
+
+
+
+      let selectElement = `
+      <div
+      id="lang"
+      class="ml-8 flex flex-col"
+      style="margin-right: 125px"
+    >
+      <label
+        class="block text-gray-700 text-sm font-bold mb-2"
+        for="language"
+        >Language</label
+      >
+      <select
+        id="language"
+        style="width: 150px"
+        class="w-full px-3 py-2 border rounded-lg text-gray-700 focus:outline-none focus:border-indigo-500"
+        [(ngModel)]="selectedLanguage"
+      >
+        <option value="option1">option1</option>
+        <option value="option2">option2</option>
+        <option value="option3">option3</option>
+      </select>
+    </div>
+    `;
+  
+      for (let element of this.formElements) {
+        switch (element.type) {
+          case 'input':
+            let elementCode = inputElement.replace(
+              /{elementName}/g,
+              element.name
+            );
+            this.elementsArray += elementCode; // Append the generated code to the elementsArray
+            break;
+          // Add more cases for other types of form elements if needed
+        }
       }
-    }
+  
+      let code = `
+<!-- ... ${this.componentSelectorName}.html ... -->
 
-    let code = `
-      <form id="form" action="#" class="space-y-8">
-        ${this.elementsArray}
-      </form>
-    `;
 
-    this.generatedCode = code;
-    this.loading = false; // Set the loading state to false when code generation is complete
+<form id="form" action="#" class="space-y-8">
+  ${this.elementsArray}
+</form>
+      `;
+  
+      this.generatedCode = code;
+      this.loading = false; // Set the loading state to false when code generation is complete
+  
+    }, 1000);
+  
+
   }
+
+  async copyCode() {
+    try {
+      await navigator.clipboard.writeText(this.generatedCode);
+      console.log('Code copied to clipboard!');
+    } catch (err) {
+      console.error('Failed to copy code: ', err);
+    }
+  }
+  
+  
+
+
 }

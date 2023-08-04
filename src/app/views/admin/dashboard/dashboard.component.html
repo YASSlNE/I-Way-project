@@ -149,21 +149,28 @@
 
 
 
-      <textarea
+      <!-- <textarea
         class="mt-4 p-4 border rounded-lg bg-gray-100 overflow-auto w-full h-40"
         *ngIf="generatedCode"
         readonly>
 
 
         {{ generatedCode }}
-      </textarea>
+      </textarea> -->
+
+
+
             
 
 
 
 
 
-
+      <ngx-monaco-editor
+      [options]="editorOptions"
+      [(ngModel)]="code"
+    ></ngx-monaco-editor>
+    
 
 
 

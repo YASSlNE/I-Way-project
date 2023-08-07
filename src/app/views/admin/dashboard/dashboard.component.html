@@ -37,6 +37,8 @@
                 >Language</label
               >
               <select
+                (change) = "changeLanguage($event)"
+                required
                 id="language"
                 style="width: 150px"
                 class="w-full px-3 py-2 border rounded-lg text-gray-700 focus:outline-none focus:border-indigo-500"

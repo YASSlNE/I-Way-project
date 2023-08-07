@@ -1,4 +1,11 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+// import arabicFile from '../../../../assets/countries/arabic.json';
+// import frenchFile from '../../../../assets/countries/french.json';
+// import englishFile from '../../../../assets/countries/english.json';
+import { HttpClient } from '@angular/common/http';
+import {englishCountries} from '../../../../assets/countries/english';
+import {arabicCountries} from '../../../../assets/countries/arabic';
+import {frenchCountries} from '../../../../assets/countries/french';
 
 import {
   MonacoEditorComponent,
@@ -12,7 +19,7 @@ import {
   styleUrls: ['./dashboard.component.css'],
 })
 export class DashboardComponent implements OnInit {
-  constructor(private monacoLoader: MonacoEditorLoaderService) {}
+  constructor(private monacoLoader: MonacoEditorLoaderService, private http: HttpClient) {}
 
   editorOptions: MonacoEditorConstructionOptions = {
     language: 'html',
@@ -33,7 +40,13 @@ export class DashboardComponent implements OnInit {
     },
   };
 
+  elementValues: { 
+    [elementName: string]: string 
+  } = {};
 
+  
+  countryValuesLanguage : string = '';
+  
   toggleWhiteSpace: boolean = false;
   componentSelectorName : string = '';
   componentClassName : string = '';
@@ -41,19 +54,32 @@ export class DashboardComponent implements OnInit {
   elementsArray = '';
   generatedCode: string = '';
   componentName: string = '';
-  selectedLanguage: string = 'javascript';
+  selectedLanguage: string = '';
   formElements: any[] = [];
   elementTypes: any[] = [
     { name: 'Input', value: 'input' },
-    { name: 'Select', value: 'select' },
+    { name: 'Select country', value: 'select_country' },
     { name: 'Text area', value: 'textarea' },
   ];
+  // arabicFile = require('/home/mahmoud/Desktop/Projects/frontend-angular/src/assets/countries/arabic.json').default;
+  // frenchFile = require('/home/mahmoud/Desktop/Projects/frontend-angular/src/assets/countries/french.json').default;
+  // englishFile = require('/home/mahmoud/Desktop/Projects/frontend-angular/src/assets/countries/english.json').default;
+
+// Now you can use arabicFile, frenchFile, and englishFile as needed in your code
+
 
   @ViewChild(MonacoEditorComponent, { static: false })
   monacoComponent!: MonacoEditorComponent;
 
-  ngOnInit() {}
+  ngOnInit() {
+    console.log(englishCountries);
+  }
 
+
+
+  changeLanguage(event: any){
+    this.countryValuesLanguage = event.target.value;
+  }
 
   transformComponentName(componentName: string) {
     const componentWords = componentName.split(' ');
@@ -65,7 +91,6 @@ export class DashboardComponent implements OnInit {
       this.componentClassName = componentClassName;
       this.componentSelectorName = componentSelectorName;
   }
-
 
   addFormElement() {
     this.formElements.push({
@@ -80,54 +105,78 @@ export class DashboardComponent implements OnInit {
   }
 
   switchEditorLanguage(language: string) {
-
-
-
-
-
-
-
-
     this.selectedLanguage = language;
+    this.generatedCode = '';
+    
     switch (language) {
       case 'html':
-        this.editorOptions.language = 'html';
+        this.generateHtmlCode();
         break;
+        
       case 'typescript':
-        this.editorOptions.language = 'typescript';
+        this.generateTypeScriptCode();
         break;
+        
       case 'css':
-        this.editorOptions.language = 'css';
+        this.generateCssCode();
         break;
+        
       case 'spec':
-        this.editorOptions.language = 'typescript';
+        this.generateSpecCode();
         break;
     }
-
-    // Dynamically load the required monaco language
-    this.monacoLoader.isMonacoLoaded$.subscribe((isLoaded) => {
-      if (isLoaded) {
-        const model = this.monacoComponent.editor.getModel();
-        if (model && this.editorOptions.language) {
-          monaco.editor.setModelLanguage(model, this.editorOptions.language);
-        }
+    
+    this.editorOptions.language = language;
+    this.loadMonacoLanguage(language);
+  }
+  
+  generateHtmlCode() {
+    for (const element of this.formElements) {
+      switch (element.type) {
+        case 'input':
+          this.generatedCode += this.generateInputElementHtml(element);
+          break;
+        case 'select_country':
+          this.generatedCode += this.generateSelectElementHtml(element);
+          break;
+        case 'textarea':
+          this.generatedCode += this.generateTextareaElementHtml(element);
+          break;
+        // Add cases for other element types if needed
       }
-    });
-
-    switch (language) {
-      case 'html':
-        this.generatedCode = `
-<!-- ... ${this.componentSelectorName}.html ... -->
-
-
-<form id="form" action="#" class="space-y-8">
-  ${this.elementsArray}
-</form>
+    }
+  }
+  generateInputElementTypescript() : string {
+    return `
+    // ${this.componentSelectorName}.component.ts
+    import { Component } from '@angular/core';
+    
+    @Component({
+      selector: 'app-${this.componentSelectorName}',
+      templateUrl: './${this.componentSelectorName}.component.html',
+      styleUrls: ['./${this.componentSelectorName}.component.css']
+    })
+    export class ${this.componentClassName}Component {
+    
+    }
         `;
-        break;
-      case 'typescript':
-        this.generatedCode = `
-//${this.componentSelectorName}.component.ts
+  }
+  generateTypeScriptCode() {
+    for(const element of this.formElements){
+      switch(element.type){
+        case 'input':
+          this.generatedCode += this.generateInputElementTypescript();
+          break;
+        case 'select_country':
+          this.generatedCode += this.generateSelectElementTypescript();
+          break;
+      }
+    }
+
+  }
+  generateSelectElementTypescript() {
+    return `
+// ${this.componentSelectorName}.component.ts
 import { Component } from '@angular/core';
 
 @Component({
@@ -136,124 +185,133 @@ import { Component } from '@angular/core';
   styleUrls: ['./${this.componentSelectorName}.component.css']
 })
 export class ${this.componentClassName}Component {
-
+  countries = ${this.countryValuesLanguage==='english' ? JSON.stringify(englishCountries)  : this.countryValuesLanguage==='french' ? JSON.stringify(frenchCountries) :  JSON.stringify(arabicCountries)}
 }
-
         `;
-        break;
-      case 'css':
-        this.generatedCode = `
-/* ${this.componentSelectorName}.component.css */
-        `;
-        break;
-      case 'spec':
-        this.generatedCode = `
-//${this.componentSelectorName}.component.spec.ts
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { ${this.componentClassName}Component } from './${this.componentSelectorName}.component';
-
-describe('${this.componentClassName}Component', () => {
-  let component: ${this.componentClassName}Component;
-  let fixture: ComponentFixture<${this.componentClassName}Component>;
-
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      declarations: [${this.componentClassName}Component]
+  }
+  
+  generateCssCode() {
+    this.generatedCode = `
+  /* ${this.componentSelectorName}.component.css */
+    `;
+  }
+  
+  generateSpecCode() {
+    this.generatedCode = `
+  // ${this.componentSelectorName}.component.spec.ts
+  import { ComponentFixture, TestBed } from '@angular/core/testing';
+  
+  import { ${this.componentClassName}Component } from './${this.componentSelectorName}.component';
+  
+  describe('${this.componentClassName}Component', () => {
+    let component: ${this.componentClassName}Component;
+    let fixture: ComponentFixture<${this.componentClassName}Component>;
+  
+    beforeEach(() => {
+      TestBed.configureTestingModule({
+        declarations: [${this.componentClassName}Component]
+      });
+      fixture = TestBed.createComponent(${this.componentClassName}Component);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
     });
-    fixture = TestBed.createComponent(${this.componentClassName}Component);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+  
+    it('should create', () => {
+      expect(component).toBeTruthy();
+    });
   });
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});                             
-
-        `;
-        break;
+    `;
+  }
+  
+  
+  loadMonacoLanguage(language: string) {
+    const model = this.monacoComponent.editor.getModel();
+    if (model) {
+      monaco.editor.setModelLanguage(model, language);
     }
   }
+  
+
+  generateInputElementHtml(element: any): string {
+    return `
+  <div>
+    <label for="${element.name}" class="block mb-2 text-sm font-medium text-gray-900">
+      ${element.name}
+    </label>
+    <input type="text" id="${element.name}" name="${element.name}"
+      class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
+      focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+      [(ngModel)]="elementValues['${element.name}']"
+    >
+  </div>
+    `;
+  }
+  
+  generateSelectElementHtml(element: any): string {
+    return `
+    <div>
+      <label for="${element.name}" class="block mb-2 text-sm font-medium text-gray-900">
+        ${element.name}
+      </label>
+      <select
+        id="${element.name}"
+        name="${element.name}"
+        class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
+        focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+        [(ngModel)]="elementValues['${element.name}']"
+      >
+        <option *ngFor="let country of getCountryOptions(element.name)" [value]="country.name">
+          <span>{{ country.name }}</span>
+        </option>
+      </select>
+    </div>
+      `;
+    }
+
+  getCountryOptions(elementName: string): Array<any> {
+    const language = this.countryValuesLanguage;
+    if (language === 'english') {
+      return englishCountries;
+    } else if (language === 'arabic') {
+      return arabicCountries;
+    } else if (language === 'french') {
+      return frenchCountries;
+    } else {
+      return [];
+    }
+  }
+
+  generateTextareaElementHtml(element: any): string {
+    return `
+  <div>
+    <label for="${element.name}" class="block mb-2 text-sm font-medium text-gray-900">
+      ${element.name}
+    </label>
+    <!-- Generate your textarea element code here -->
+  </div>
+    `;
+  }
+  
 
   generateCode() {
     this.elementsArray = '';
     this.toggleWhiteSpace = true;
-
-
     this.loading = true;
-
-
+    this.elementValues = {};
+    for (let element of this.formElements) {
+      this.elementValues[element.name] = ''; // Initialize the value to an empty string
+    }
     setTimeout(()=>{
 
-      this.transformComponentName(this.componentName);
+    this.transformComponentName(this.componentName);
+   
+    // console.log("=====================================")
+    this.loading = false; 
 
+    this.switchEditorLanguage('html');
 
-      let inputElement = `
-  <div>
-    <label for="{elementName}" class="block mb-2 text-sm font-medium text-gray-900">
-      {elementName}
-    </label>
-    <input type="text" id="{elementName}" name="{elementName}"
-      class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
-      focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-    >
-  </div>
-      `;
-
-
-
-      let selectElement = `
-      <div
-      id="lang"
-      class="ml-8 flex flex-col"
-      style="margin-right: 125px">
-      <label
-        class="block text-gray-700 text-sm font-bold mb-2"
-        for="language"
-        >Language</label
-      >
-      <select
-        id="language"
-        style="width: 150px"
-        class="w-full px-3 py-2 border rounded-lg text-gray-700 focus:outline-none focus:border-indigo-500"
-        [(ngModel)]="selectedLanguage"
-      >
-        <option value="option1">option1</option>
-        <option value="option2">option2</option>
-        <option value="option3">option3</option>
-      </select>
-    </div>
-    `;
-  
-      for (let element of this.formElements) {
-        switch (element.type) {
-          case 'input':
-            let elementCode = inputElement.replace(
-              /{elementName}/g,
-              element.name
-            );
-            this.elementsArray += elementCode; // Append the generated code to the elementsArray
-            break;
-          // Add more cases for other types of form elements if needed
-        }
-      }
-  
-      let code = `
-<!-- ... ${this.componentSelectorName}.html ... -->
-
-
-<form id="form" action="#" class="space-y-8">
-  ${this.elementsArray}
-</form>
-      `;
-  
-      this.generatedCode = code;
-      this.loading = false; // Set the loading state to false when code generation is complete
-  
+    // console.log("---------------------------------------")
     }, 1000);
-  
-
   }
 
   async copyCode() {

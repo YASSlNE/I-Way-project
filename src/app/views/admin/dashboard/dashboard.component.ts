@@ -178,7 +178,6 @@ describe('${this.componentClassName}Component', () => {
 
   generateCode() {
     this.elementsArray = '';
-
     this.toggleWhiteSpace = true;
 
 
@@ -208,8 +207,7 @@ describe('${this.componentClassName}Component', () => {
       <div
       id="lang"
       class="ml-8 flex flex-col"
-      style="margin-right: 125px"
-    >
+      style="margin-right: 125px">
       <label
         class="block text-gray-700 text-sm font-bold mb-2"
         for="language"

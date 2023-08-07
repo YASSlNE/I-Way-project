@@ -177,7 +177,7 @@ export class DashboardComponent implements OnInit {
   }
   generateSelectElementTypescript() {
 
-    if(!this.countryAPI){
+    if(this.countryAPI){
       console.log("skrrra")
       return `
 import { Component } from '@angular/core';

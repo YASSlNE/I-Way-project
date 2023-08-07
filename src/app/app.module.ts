@@ -56,6 +56,7 @@ import { FormGeneratorComponent } from './components/form-generator/form-generat
 
 import { MonacoEditorModule, MONACO_PATH } from '@materia-ui/ngx-monaco-editor';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatDialogModule } from "@angular/material/dialog";
 
 
 @NgModule({
@@ -97,7 +98,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     LogoutComponent,
     FormGeneratorComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule, FormsModule, HttpClientModule,MonacoEditorModule, BrowserAnimationsModule],
+  imports: [BrowserModule, AppRoutingModule, FormsModule, HttpClientModule,MonacoEditorModule, BrowserAnimationsModule, MatDialogModule],
   providers: [LoginComponent, {
     provide: MONACO_PATH,
     useValue: 'https://unpkg.com/monaco-editor@0.36.1/min/vs',

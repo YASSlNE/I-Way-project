@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 // import arabicFile from '../../../../assets/countries/arabic.json';
 // import frenchFile from '../../../../assets/countries/french.json';
 // import englishFile from '../../../../assets/countries/english.json';
@@ -6,12 +6,14 @@ import { HttpClient } from '@angular/common/http';
 import {englishCountries} from '../../../../assets/countries/english';
 import {arabicCountries} from '../../../../assets/countries/arabic';
 import {frenchCountries} from '../../../../assets/countries/french';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 import {
   MonacoEditorComponent,
   MonacoEditorConstructionOptions,
   MonacoEditorLoaderService,
 } from '@materia-ui/ngx-monaco-editor';
+import { CountrySelectDialogComponent } from './countryselectdialog.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -19,8 +21,12 @@ import {
   styleUrls: ['./dashboard.component.css'],
 })
 export class DashboardComponent implements OnInit {
+
   countryAPI: any = false;
-  constructor(private monacoLoader: MonacoEditorLoaderService, private http: HttpClient) {}
+
+
+  
+  constructor(private monacoLoader: MonacoEditorLoaderService, private http: HttpClient, private dialog: MatDialog) {}
 
   editorOptions: MonacoEditorConstructionOptions = {
     language: 'html',
@@ -62,9 +68,9 @@ export class DashboardComponent implements OnInit {
     { name: 'Select country', value: 'select_country' },
     { name: 'Text area', value: 'textarea' },
   ];
-  // arabicFile = require('/home/mahmoud/Desktop/Projects/frontend-angular/src/assets/countries/arabic.json').default;
-  // frenchFile = require('/home/mahmoud/Desktop/Projects/frontend-angular/src/assets/countries/french.json').default;
-  // englishFile = require('/home/mahmoud/Desktop/Projects/frontend-angular/src/assets/countries/english.json').default;
+// arabicFile = require('/home/mahmoud/Desktop/Projects/frontend-angular/src/assets/countries/arabic.json').default;
+// frenchFile = require('/home/mahmoud/Desktop/Projects/frontend-angular/src/assets/countries/french.json').default;
+// englishFile = require('/home/mahmoud/Desktop/Projects/frontend-angular/src/assets/countries/english.json').default;
 
 // Now you can use arabicFile, frenchFile, and englishFile as needed in your code
 
@@ -76,6 +82,30 @@ export class DashboardComponent implements OnInit {
     console.log(englishCountries);
   }
 
+
+  onElementTypeChange(event: any) {
+
+    if (event.target.value === 'select_country') {
+      this.openDialog();
+    }
+
+  }
+
+  openDialog() {
+    const dialogRef = this.dialog.open(CountrySelectDialogComponent, {
+      width: '300px', // Set the width as per your preference
+      data: {},
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result === 'api') {
+        // Handle the case where the user chose to retrieve countries by API
+      } else if (result === 'not_api') {
+        // Handle the case where the user chose not to retrieve countries by API
+      }
+    });
+  
+}
 
 
   changeLanguage(event: any){

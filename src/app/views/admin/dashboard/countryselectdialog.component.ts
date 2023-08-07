@@ -7,7 +7,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
     <h2 mat-dialog-title>Select Option</h2>
     <mat-dialog-content>
       <button mat-button (click)="dialogRef.close('api')">Retrieve countries by API</button>
-      <button mat-button (click)="dialogRef.close('not_api')">Do not retrieve countries by API</button>
+      <button mat-button (click)="dialogRef.close('not_api')">Retrieve countries manually</button>
     </mat-dialog-content>
   `,
 })

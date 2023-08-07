@@ -52,7 +52,7 @@ export class DashboardComponent implements OnInit {
   } = {};
 
   
-  countryValuesLanguage : string = '';
+  countryValuesLanguage : string = 'english';
   
   toggleWhiteSpace: boolean = false;
   componentSelectorName : string = '';
@@ -79,7 +79,6 @@ export class DashboardComponent implements OnInit {
   monacoComponent!: MonacoEditorComponent;
 
   ngOnInit() {
-    console.log(englishCountries);
   }
 
 
@@ -93,16 +92,12 @@ export class DashboardComponent implements OnInit {
 
   openDialog() {
     const dialogRef = this.dialog.open(CountrySelectDialogComponent, {
-      width: '300px', // Set the width as per your preference
+      width: '300px', 
       data: {},
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      if (result === 'api') {
-        // Handle the case where the user chose to retrieve countries by API
-      } else if (result === 'not_api') {
-        // Handle the case where the user chose not to retrieve countries by API
-      }
+      this.countryAPI = result==='api'?true:false;
     });
   
 }

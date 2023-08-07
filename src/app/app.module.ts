@@ -57,6 +57,7 @@ import { FormGeneratorComponent } from './components/form-generator/form-generat
 import { MonacoEditorModule, MONACO_PATH } from '@materia-ui/ngx-monaco-editor';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDialogModule } from "@angular/material/dialog";
+import { CountrySelectDialogComponent } from "./views/admin/dashboard/countryselectdialog.component";
 
 
 @NgModule({
@@ -97,6 +98,7 @@ import { MatDialogModule } from "@angular/material/dialog";
     ProfileComponent,
     LogoutComponent,
     FormGeneratorComponent,
+    CountrySelectDialogComponent
   ],
   imports: [BrowserModule, AppRoutingModule, FormsModule, HttpClientModule,MonacoEditorModule, BrowserAnimationsModule, MatDialogModule],
   providers: [LoginComponent, {

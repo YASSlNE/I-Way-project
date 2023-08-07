@@ -19,6 +19,7 @@ import {
   styleUrls: ['./dashboard.component.css'],
 })
 export class DashboardComponent implements OnInit {
+  countryAPI: any = false;
   constructor(private monacoLoader: MonacoEditorLoaderService, private http: HttpClient) {}
 
   editorOptions: MonacoEditorConstructionOptions = {
@@ -175,6 +176,30 @@ export class DashboardComponent implements OnInit {
 
   }
   generateSelectElementTypescript() {
+
+    if(!this.countryAPI){
+      console.log("skrrra")
+      return `
+import { Component } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+@Component({
+  selector: 'app-${this.componentSelectorName}',
+  templateUrl: './${this.componentSelectorName}.component.html',
+  styleUrls: ['./${this.componentSelectorName}.component.css']
+})
+export class ${this.componentClassName}Component {
+  countries : any;
+  constructor(private http: HttpClient) {
+    this.http.get<any>('https://raw.githubusercontent.com/YASSlNE/I-Way-project/master/src/assets/countries/${this.countryValuesLanguage}.json').subscribe(data => {
+      this.countries = data;
+      console.log(data); 
+    });
+  }
+}`;
+      
+    }
+    else{
+      console.log("no skrrra")
     return `
 // ${this.componentSelectorName}.component.ts
 import { Component } from '@angular/core';
@@ -189,6 +214,7 @@ export class ${this.componentClassName}Component {
 }
         `;
   }
+}
   
   generateCssCode() {
     this.generatedCode = `
@@ -258,9 +284,8 @@ export class ${this.componentClassName}Component {
         name="${element.name}"
         class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
         focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        [(ngModel)]="elementValues['${element.name}']"
       >
-        <option *ngFor="let country of getCountryOptions(element.name)" [value]="country.name">
+        <option *ngFor="let country of countries" [value]="country.name">
           <span>{{ country.name }}</span>
         </option>
       </select>

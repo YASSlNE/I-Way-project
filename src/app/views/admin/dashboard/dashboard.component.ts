@@ -1,7 +1,4 @@
 import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
-// import arabicFile from '../../../../assets/countries/arabic.json';
-// import frenchFile from '../../../../assets/countries/french.json';
-// import englishFile from '../../../../assets/countries/english.json';
 import { HttpClient } from '@angular/common/http';
 import {englishCountries} from '../../../../assets/countries/english';
 import {arabicCountries} from '../../../../assets/countries/arabic';
@@ -52,7 +49,7 @@ export class DashboardComponent implements OnInit {
   } = {};
 
   
-  countryValuesLanguage : string = 'english';
+  selectedLanguage : string = 'english';
   
   toggleWhiteSpace: boolean = false;
   componentSelectorName : string = '';
@@ -61,12 +58,13 @@ export class DashboardComponent implements OnInit {
   elementsArray = '';
   generatedCode: string = '';
   componentName: string = '';
-  selectedLanguage: string = '';
+  selectedProgrammingLanguage: string = 'html';
   formElements: any[] = [];
   elementTypes: any[] = [
     { name: 'Input', value: 'input' },
     { name: 'Select country', value: 'select_country' },
     { name: 'Text area', value: 'textarea' },
+    { name: 'Select gender', value: 'select_gender' },
   ];
 // arabicFile = require('/home/mahmoud/Desktop/Projects/frontend-angular/src/assets/countries/arabic.json').default;
 // frenchFile = require('/home/mahmoud/Desktop/Projects/frontend-angular/src/assets/countries/french.json').default;
@@ -89,7 +87,6 @@ export class DashboardComponent implements OnInit {
     }
 
   }
-
   openDialog() {
     const dialogRef = this.dialog.open(CountrySelectDialogComponent, {
       width: '300px', 
@@ -101,12 +98,9 @@ export class DashboardComponent implements OnInit {
     });
   
 }
-
-
   changeLanguage(event: any){
-    this.countryValuesLanguage = event.target.value;
+    this.selectedLanguage = event.target.value;
   }
-
   transformComponentName(componentName: string) {
     const componentWords = componentName.split(' ');
     const componentSelectorName = componentWords.join('-').toLowerCase();
@@ -117,7 +111,6 @@ export class DashboardComponent implements OnInit {
       this.componentClassName = componentClassName;
       this.componentSelectorName = componentSelectorName;
   }
-
   addFormElement() {
     this.formElements.push({
       type: 'input',
@@ -125,13 +118,11 @@ export class DashboardComponent implements OnInit {
       validator: '',
     });
   }
-
   removeFormElement(index: number) {
     this.formElements.splice(index, 1);
   }
-
   switchEditorLanguage(language: string) {
-    this.selectedLanguage = language;
+    this.selectedProgrammingLanguage = language;
     this.generatedCode = '';
     
     switch (language) {
@@ -155,7 +146,6 @@ export class DashboardComponent implements OnInit {
     this.editorOptions.language = language;
     this.loadMonacoLanguage(language);
   }
-  
   generateHtmlCode() {
     for (const element of this.formElements) {
       switch (element.type) {
@@ -168,63 +158,39 @@ export class DashboardComponent implements OnInit {
         case 'textarea':
           this.generatedCode += this.generateTextareaElementHtml(element);
           break;
-        // Add cases for other element types if needed
+        case 'select_gender':
+          this.generatedCode += this.generateSelectGenderElementHtml(element);
       }
     }
   }
+generateSelectGenderElementHtml(element: any): string {
+  const genderOptions = this.selectedLanguage == 'english' ?  [
+    { value: 'male', label: 'Male' },
+    { value: 'female', label: 'Female' }
+  ]:
+  this.selectedLanguage == 'arabic' ?  [
+    { value: 'male', label: 'ذكر' },
+    { value: 'female', label: 'أنثى' }
+  ]
+  : [
+    { value: 'male', label: 'Homme' },
+    { value: 'female', label: 'Femme' }
+  ];
+
+  const optionsHtml = genderOptions
+    .map(option => `<option value="${option.value}">${option.label}</option>`)
+    .join('');
+
+  const selectHtml = `
+    <select [(ngModel)]="${element.name}" name="${element.name}" id="${element.name}">
+      ${optionsHtml}
+    </select>
+  `;
+
+  return selectHtml;
+}
+
   generateInputElementTypescript() : string {
-    return `
-    // ${this.componentSelectorName}.component.ts
-    import { Component } from '@angular/core';
-    
-    @Component({
-      selector: 'app-${this.componentSelectorName}',
-      templateUrl: './${this.componentSelectorName}.component.html',
-      styleUrls: ['./${this.componentSelectorName}.component.css']
-    })
-    export class ${this.componentClassName}Component {
-    
-    }
-        `;
-  }
-  generateTypeScriptCode() {
-    for(const element of this.formElements){
-      switch(element.type){
-        case 'input':
-          this.generatedCode += this.generateInputElementTypescript();
-          break;
-        case 'select_country':
-          this.generatedCode += this.generateSelectElementTypescript();
-          break;
-      }
-    }
-
-  }
-  generateSelectElementTypescript() {
-
-    if(this.countryAPI){
-      console.log("skrrra")
-      return `
-import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-@Component({
-  selector: 'app-${this.componentSelectorName}',
-  templateUrl: './${this.componentSelectorName}.component.html',
-  styleUrls: ['./${this.componentSelectorName}.component.css']
-})
-export class ${this.componentClassName}Component {
-  countries : any;
-  constructor(private http: HttpClient) {
-    this.http.get<any>('https://raw.githubusercontent.com/YASSlNE/I-Way-project/master/src/assets/countries/${this.countryValuesLanguage}.json').subscribe(data => {
-      this.countries = data;
-      console.log(data); 
-    });
-  }
-}`;
-      
-    }
-    else{
-      console.log("no skrrra")
     return `
 // ${this.componentSelectorName}.component.ts
 import { Component } from '@angular/core';
@@ -235,91 +201,130 @@ import { Component } from '@angular/core';
   styleUrls: ['./${this.componentSelectorName}.component.css']
 })
 export class ${this.componentClassName}Component {
-  countries = ${this.countryValuesLanguage==='english' ? JSON.stringify(englishCountries)  : this.countryValuesLanguage==='french' ? JSON.stringify(frenchCountries) :  JSON.stringify(arabicCountries)}
-}
+
+
+        `;
+  }
+  generateTypeScriptCode() {
+    let uniqueArray :any[]= [];
+    const seenIds = new Set();
+    let unique =  this.formElements
+     unique.forEach(obj => {
+      if (!seenIds.has(obj.type)) {
+        uniqueArray.push(obj);
+        seenIds.add(obj.type);
+      }
+    });
+    this.generatedCode = this.generateInputElementTypescript();
+    for(const element of uniqueArray){
+      switch(element.type){
+        
+        case 'select_country':
+          this.generatedCode += this.generateSelectCountryElementTypescript();
+          break;
+      }
+    }
+    for(const element of this.formElements){
+          this.generatedCode += ` \n${element.name} : any;`
+      
+    }
+    this.generatedCode += "\n}"
+  }
+  generateSelectCountryElementTypescript() {
+
+    if(this.countryAPI){
+      return `
+
+countries : any;
+constructor(private http: HttpClient) {
+  this.http.get<any>('https://raw.githubusercontent.com/YASSlNE/I-Way-project/master/src/assets/countries/${this.selectedLanguage}.json').subscribe(data => {
+    this.countries = data;
+    console.log(data); 
+  });
+}`;
+      
+    }
+    else{
+    return `
+
+  countries = ${this.selectedLanguage==='english' ? JSON.stringify(englishCountries)  : this.selectedLanguage==='french' ? JSON.stringify(frenchCountries) :  JSON.stringify(arabicCountries)}
+
         `;
   }
 }
-  
   generateCssCode() {
     this.generatedCode = `
   /* ${this.componentSelectorName}.component.css */
     `;
-  }
-  
+  } 
   generateSpecCode() {
     this.generatedCode = `
-  // ${this.componentSelectorName}.component.spec.ts
-  import { ComponentFixture, TestBed } from '@angular/core/testing';
-  
-  import { ${this.componentClassName}Component } from './${this.componentSelectorName}.component';
-  
-  describe('${this.componentClassName}Component', () => {
-    let component: ${this.componentClassName}Component;
-    let fixture: ComponentFixture<${this.componentClassName}Component>;
-  
-    beforeEach(() => {
-      TestBed.configureTestingModule({
-        declarations: [${this.componentClassName}Component]
-      });
-      fixture = TestBed.createComponent(${this.componentClassName}Component);
-      component = fixture.componentInstance;
-      fixture.detectChanges();
+// ${this.componentSelectorName}.component.spec.ts
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+
+import { ${this.componentClassName}Component } from './${this.componentSelectorName}.component';
+
+describe('${this.componentClassName}Component', () => {
+  let component: ${this.componentClassName}Component;
+  let fixture: ComponentFixture<${this.componentClassName}Component>;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      declarations: [${this.componentClassName}Component]
     });
-  
-    it('should create', () => {
-      expect(component).toBeTruthy();
-    });
+    fixture = TestBed.createComponent(${this.componentClassName}Component);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
   });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});
     `;
   }
-  
-  
   loadMonacoLanguage(language: string) {
     const model = this.monacoComponent.editor.getModel();
     if (model) {
       monaco.editor.setModelLanguage(model, language);
     }
   }
-  
-
   generateInputElementHtml(element: any): string {
     return `
-  <div>
-    <label for="${element.name}" class="block mb-2 text-sm font-medium text-gray-900">
-      ${element.name}
-    </label>
-    <input type="text" id="${element.name}" name="${element.name}"
-      class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
-      focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-      [(ngModel)]="elementValues['${element.name}']"
-    >
-  </div>
+<div>
+  <label for="${element.name}" class="block mb-2 text-sm font-medium text-gray-900">
+    ${element.name}
+  </label>
+  <input type="text" id="${element.name}" name="${element.name}"
+    class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
+    focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+    [(ngModel)]="${element.name}"
+  >
+</div>
     `;
   }
-  
   generateSelectElementHtml(element: any): string {
     return `
-    <div>
-      <label for="${element.name}" class="block mb-2 text-sm font-medium text-gray-900">
-        ${element.name}
-      </label>
-      <select
-        id="${element.name}"
-        name="${element.name}"
-        class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
-        focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-      >
-        <option *ngFor="let country of countries" [value]="country.name">
-          <span>{{ country.name }}</span>
-        </option>
-      </select>
-    </div>
+<div>
+  <label for="${element.name}" class="block mb-2 text-sm font-medium text-gray-900">
+    ${element.name}
+  </label>
+  <select
+    [(ngModel)]="${element.name}"
+    id="${element.name}"
+    name="${element.name}"
+    class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
+    focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+  >
+    <option *ngFor="let country of countries" [value]="country.name">
+      <span>{{ country.name }}</span>
+    </option>
+  </select>
+</div>
       `;
     }
-
   getCountryOptions(elementName: string): Array<any> {
-    const language = this.countryValuesLanguage;
+    const language = this.selectedLanguage;
     if (language === 'english') {
       return englishCountries;
     } else if (language === 'arabic') {
@@ -330,7 +335,6 @@ export class ${this.componentClassName}Component {
       return [];
     }
   }
-
   generateTextareaElementHtml(element: any): string {
     return `
   <div>
@@ -341,8 +345,6 @@ export class ${this.componentClassName}Component {
   </div>
     `;
   }
-  
-
   generateCode() {
     this.elementsArray = '';
     this.toggleWhiteSpace = true;
@@ -363,7 +365,6 @@ export class ${this.componentClassName}Component {
     // console.log("---------------------------------------")
     }, 1000);
   }
-
   async copyCode() {
     try {
       await navigator.clipboard.writeText(this.generatedCode);

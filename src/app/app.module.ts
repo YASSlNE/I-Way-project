@@ -61,6 +61,8 @@ import { CountrySelectDialogComponent } from "./views/admin/dashboard/countrysel
 import { CrudGeneratorComponent } from './views/admin/dashboard/crud-generator/crud-generator.component';
 import { RouterModule } from '@angular/router';
 import { ScriptLibraryComponent } from './views/admin/dashboard/script-library/script-library.component';
+import { PostComponent } from './views/admin/dashboard/script-library/post/post.component';
+import { ChildPostComponent } from './views/admin/dashboard/script-library/child-post/child-post.component';
 
 
 @NgModule({
@@ -103,7 +105,9 @@ import { ScriptLibraryComponent } from './views/admin/dashboard/script-library/s
     FormGeneratorComponent,
     CountrySelectDialogComponent,
     CrudGeneratorComponent,
-    ScriptLibraryComponent
+    ScriptLibraryComponent,
+    PostComponent,
+    ChildPostComponent
   ],
   imports: [RouterModule, ReactiveFormsModule, BrowserModule, AppRoutingModule, FormsModule, HttpClientModule,MonacoEditorModule, BrowserAnimationsModule, MatDialogModule],
   providers: [LoginComponent, {

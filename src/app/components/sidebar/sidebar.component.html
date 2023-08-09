@@ -61,7 +61,7 @@
 
 
 
-<ul class="md:flex-col md:min-w-full flex flex-col list-none bg-gray-700 rounded-lg p-4">
+<ul class="md:flex-col md:min-w-full flex flex-col list-none bg-gray-700 rounded-lg p-4 font-sans">
   <li class="items-center">
     <a
       [routerLink]="['/admin/dashboard']"
@@ -69,7 +69,7 @@
       routerLinkActive
       #adminDashboard="routerLinkActive"
     >
-      <i class="fas fa-cogs mr-2 text-sm opacity-75"></i>
+      <i class="fas fa-cogs mr-2 text-sm opacity-75 text-pink-500		"></i>
       Form generator
     </a>
   </li>
@@ -80,7 +80,8 @@
       routerLinkActive
       #crudGeneratorLink="routerLinkActive"
     >
-      <i class="fas fa-puzzle-piece mr-2 text-sm opacity-75"></i>
+    <i class="fas fa-puzzle-piece mr-2 text-sm opacity-75 text-blue-500"></i>
+
       CRUD generator
     </a>
   </li>
@@ -91,7 +92,7 @@
       routerLinkActive
       #scriptLibrary="routerLinkActive"
     >
-      <i class="fas fa-code mr-2 text-sm opacity-75"></i>
+      <i class="fas fa-code mr-2 text-sm opacity-75 text-yellow-500"></i>
       Script Library
     </a>
   </li>

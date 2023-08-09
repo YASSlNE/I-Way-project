@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-post',
@@ -7,12 +7,11 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 })
 export class PostComponent {
 
-  @Input() childPosts!: any[]; // Use an appropriate type for your child post data
-  @Input() showChildPosts: boolean = false;
-  @Output() postClicked: EventEmitter<void> = new EventEmitter<void>();
+  @Input() title!: string;
+  @Input() childPosts!: string[]; // Use an appropriate type for your child post data
+  showChildPosts: boolean = false;
 
   onPostClicked() {
     this.showChildPosts = !this.showChildPosts;
-    this.postClicked.emit();
   }
 }

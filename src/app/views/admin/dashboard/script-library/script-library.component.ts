@@ -10,16 +10,16 @@ export class ScriptLibraryComponent {
     {
       title: 'Example Post 1',
       childPosts: [
-        { content: 'Child Post 1-1' },
-        { content: 'Child Post 1-2' }
+        'Child Post 1-1',
+        'Child Post 1-2'
       ],
       showChildPosts: false
     },
     {
       title: 'Example Post 2',
       childPosts: [
-        { content: 'Child Post 2-1' },
-        { content: 'Child Post 2-2' }
+        'Child Post 2-1',
+        'Child Post 2-2'
       ],
       showChildPosts: false
     }

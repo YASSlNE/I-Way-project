@@ -50,7 +50,7 @@ import { UserDropdownComponent } from "./components/dropdowns/user-dropdown/user
 import { HttpClientModule } from '@angular/common/http';
 
 
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LogoutComponent } from './views/auth/logout/logout.component';
 import { FormGeneratorComponent } from './components/form-generator/form-generator.component'; // Add this line
 
@@ -58,6 +58,9 @@ import { MonacoEditorModule, MONACO_PATH } from '@materia-ui/ngx-monaco-editor';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDialogModule } from "@angular/material/dialog";
 import { CountrySelectDialogComponent } from "./views/admin/dashboard/countryselectdialog.component";
+import { CrudGeneratorComponent } from './views/admin/dashboard/crud-generator/crud-generator.component';
+import { RouterModule } from '@angular/router';
+import { ScriptLibraryComponent } from './views/admin/dashboard/script-library/script-library.component';
 
 
 @NgModule({
@@ -98,9 +101,11 @@ import { CountrySelectDialogComponent } from "./views/admin/dashboard/countrysel
     ProfileComponent,
     LogoutComponent,
     FormGeneratorComponent,
-    CountrySelectDialogComponent
+    CountrySelectDialogComponent,
+    CrudGeneratorComponent,
+    ScriptLibraryComponent
   ],
-  imports: [BrowserModule, AppRoutingModule, FormsModule, HttpClientModule,MonacoEditorModule, BrowserAnimationsModule, MatDialogModule],
+  imports: [RouterModule, ReactiveFormsModule, BrowserModule, AppRoutingModule, FormsModule, HttpClientModule,MonacoEditorModule, BrowserAnimationsModule, MatDialogModule],
   providers: [LoginComponent, {
     provide: MONACO_PATH,
     useValue: 'https://unpkg.com/monaco-editor@0.36.1/min/vs',

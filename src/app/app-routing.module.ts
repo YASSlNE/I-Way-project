@@ -20,6 +20,13 @@ import { IndexComponent } from "./views/index/index.component";
 import { LandingComponent } from "./views/landing/landing.component";
 import { ProfileComponent } from "./views/profile/profile.component";
 
+
+
+import {CrudGeneratorComponent} from './views/admin/dashboard/crud-generator/crud-generator.component';
+import { ScriptLibraryComponent } from "./views/admin/dashboard/script-library/script-library.component";
+
+
+
 const routes: Routes = [
   // admin views
   {
@@ -27,6 +34,8 @@ const routes: Routes = [
     component: AdminComponent,
     children: [
       { path: "dashboard", component: DashboardComponent },
+      { path: "crudGen", component: CrudGeneratorComponent},
+      { path: "scriptLibrary", component: ScriptLibraryComponent},
       { path: "settings", component: SettingsComponent },
       { path: "tables", component: TablesComponent },
       { path: "maps", component: MapsComponent },

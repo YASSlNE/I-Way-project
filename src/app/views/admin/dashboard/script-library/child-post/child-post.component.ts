@@ -25,6 +25,11 @@ export class ChildPostComponent {
   };
 
   solutionCode: any = '<h1>Solution</h1>';
+  showTabs = false;
+
+  toggleTabs() {
+    this.showTabs = !this.showTabs;
+  }
 
 
   

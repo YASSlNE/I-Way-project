@@ -1,8 +1,38 @@
-<div class="ml-[90px] w-3/4 rounded-lg shadow-xl p-6 mt-16 my-4 px-4 text-center mt-4 bg-gray-700">
+<div  class="ml-[210px] w-3/4 rounded-lg shadow-xl p-2 mt-16 my-4 text-center mt-4 bg-gray-700">
+  <!-- Tab Switcher -->
+  <div class="flex justify-between mb-4">
 
-<div class="flex-grow flex items-center">
-      <div class="h-full w-1 bg-white mr-4"></div>
-      <p class="text-left text-white font-sans text-xl">{{ content }}</p>
+
+    <button
+      class="flex-1 px-4 py-2 rounded-l-xl bg-gray-800 text-white"
+      [class.bg-gray-800]="activeTab === 'solutions'"
+      (click)="activeTab = 'solutions'"
+    >
+      Solutions
+    </button>
+    <button
+      class="flex-1 px-4 py-2 rounded-r-xl bg-gray-800 text-white"
+      [class.bg-gray-800]="activeTab === 'description'"
+      (click)="activeTab = 'description'"
+    >
+      Description
+    </button>
+  </div>
+
+  <!-- Content based on active tab -->
+  <div class="py-3" *ngIf="activeTab === 'solutions'">
+    <div class="h-[300px]" *ngIf="activeTab === 'solutions'">
+      <ngx-monaco-editor
+      [options]="editorOptions"
+      [(ngModel)]="solutionCode"
+    >
+    </ngx-monaco-editor>
     </div>
 
-    </div>
+  </div>
+  <div class="py-3" *ngIf="activeTab === 'description'">
+    <h1 class="text-white">
+      Description
+    </h1>
+  </div>
+</div>

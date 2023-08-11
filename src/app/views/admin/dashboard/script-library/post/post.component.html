@@ -9,5 +9,5 @@
   </div>
   
   <ng-container *ngIf="showChildPosts">
-    <app-child-post *ngFor="let content of childPosts" [content]="content"></app-child-post>
+    <app-child-post [@fadeInOut] *ngFor="let content of childPosts" [content]="content"></app-child-post>
   </ng-container>

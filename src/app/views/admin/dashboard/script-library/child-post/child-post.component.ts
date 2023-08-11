@@ -1,4 +1,9 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
+import {
+  MonacoEditorComponent,
+  MonacoEditorConstructionOptions,
+  MonacoEditorLoaderService,
+} from '@materia-ui/ngx-monaco-editor';
 
 @Component({
   selector: 'app-child-post',
@@ -7,4 +12,21 @@ import { Component, Input } from '@angular/core';
 })
 export class ChildPostComponent {
   @Input() content!: string;
+
+  @ViewChild(MonacoEditorComponent, { static: false })
+  monacoComponent!: MonacoEditorComponent;
+
+  activeTab: any = "solutions";
+  editorOptions: MonacoEditorConstructionOptions =  {
+    language: 'html',
+    theme: 'vs-dark',
+    automaticLayout: true,
+    readOnly: true,
+  };
+
+  solutionCode: any = '<h1>Solution</h1>';
+
+
+  
+
 }

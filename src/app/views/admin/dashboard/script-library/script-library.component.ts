@@ -6,10 +6,10 @@ import { Component } from '@angular/core';
   styleUrls: ['./script-library.component.css']
 })
 export class ScriptLibraryComponent {
-  posts = [
+  problems = [
     {
       title: 'Example Post 1',
-      childPosts: [
+      solutions: [
         'Child Post 1-1',
         'Child Post 1-2'
       ],
@@ -17,7 +17,7 @@ export class ScriptLibraryComponent {
     },
     {
       title: 'Example Post 2',
-      childPosts: [
+      solutions: [
         'Child Post 2-1',
         'Child Post 2-2'
       ],
@@ -26,6 +26,6 @@ export class ScriptLibraryComponent {
   ];
 
   onPostClicked(index: number) {
-    this.posts[index].showChildPosts = !this.posts[index].showChildPosts;
+    this.problems[index].showChildPosts = !this.problems[index].showChildPosts;
   }
 }

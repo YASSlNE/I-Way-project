@@ -18,7 +18,7 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
 export class PostComponent {
 
   @Input() title!: string;
-  @Input() childPosts!: string[]; // Use an appropriate type for your child post data
+  @Input() solutions!: string[]; // Use an appropriate type for your child post data
   showChildPosts: boolean = false;
 
   onPostClicked() {

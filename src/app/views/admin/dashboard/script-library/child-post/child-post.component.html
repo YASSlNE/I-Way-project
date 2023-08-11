@@ -5,10 +5,10 @@
 
     <button
       class="flex-1 px-4 py-2 rounded-l-xl bg-gray-800 text-white"
-      [class.bg-gray-800]="activeTab === 'solutions'"
-      (click)="activeTab = 'solutions'"
+      [class.bg-gray-800]="activeTab === 'code'"
+      (click)="activeTab = 'code'"
     >
-      Solutions
+      Code
     </button>
     <button
       class="flex-1 px-4 py-2 rounded-r-xl bg-gray-800 text-white"
@@ -20,8 +20,8 @@
   </div>
 
   <!-- Content based on active tab -->
-  <div class="py-3" *ngIf="activeTab === 'solutions'">
-    <div class="h-[300px]" *ngIf="activeTab === 'solutions'">
+  <div class="py-3" *ngIf="activeTab === 'code'">
+    <div class="h-[300px]" *ngIf="activeTab === 'code'">
       <ngx-monaco-editor
       [options]="editorOptions"
       [(ngModel)]="solutionCode"

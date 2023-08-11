@@ -16,7 +16,7 @@ export class ChildPostComponent {
   @ViewChild(MonacoEditorComponent, { static: false })
   monacoComponent!: MonacoEditorComponent;
 
-  activeTab: any = "solutions";
+  activeTab: any = "code";
   editorOptions: MonacoEditorConstructionOptions =  {
     language: 'html',
     theme: 'vs-dark',

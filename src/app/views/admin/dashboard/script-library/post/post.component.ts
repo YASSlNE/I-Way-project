@@ -1,5 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { trigger, state, style, animate, transition } from '@angular/animations';
+import { ProblemService } from '../../services/problem.service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-post',
@@ -17,11 +19,24 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
 })
 export class PostComponent {
 
+  constructor(private problemService : ProblemService){
+  }
+
   @Input() title!: string;
   @Input() solutions!: string[]; // Use an appropriate type for your child post data
   showChildPosts: boolean = false;
 
-  onPostClicked() {
+  async onPostClicked() {
     this.showChildPosts = !this.showChildPosts;
+    this.problemService.getAllProblems().subscribe({
+      next: (data) => {
+        console.log(data);
+      }, error : (err) => {
+      console.log(err);
+    }
+  }
+    )
+  
+  
   }
 }

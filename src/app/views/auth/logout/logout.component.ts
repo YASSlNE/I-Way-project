@@ -23,7 +23,7 @@ export class LogoutComponent implements OnInit {
       this.authService.logout().subscribe({
         next: () => {
           this.storageService.clean();
-
+          console.log('User logged out successfully')
           window.location.reload();
           this.router.navigate(['/auth/login']);
         },

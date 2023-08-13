@@ -28,7 +28,7 @@ export class PostComponent {
 
   async onPostClicked() {
     this.showChildPosts = !this.showChildPosts;
-    this.problemService.getAllProblems().subscribe({
+    this.problemService.getAllProblemsByUser().subscribe({
       next: (data) => {
         console.log(data);
       }, error : (err) => {

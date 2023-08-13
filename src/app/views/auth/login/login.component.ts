@@ -30,22 +30,6 @@ export class LoginComponent implements OnInit {
   username: any;
 
   constructor(private authService: AuthService, private storageService: StorageService) {
-    const storedRememberMe = localStorage.getItem('rememberMe');
-    if (storedRememberMe !== null) {
-      this.rememberMe = storedRememberMe === 'true';
-    }
-
-    if (this.rememberMe) {
-      const rememberedUsername = localStorage.getItem('rememberedUsername');
-      const rememberedPassword = localStorage.getItem('rememberedPassword');
-      if (rememberedUsername && rememberedPassword) {
-        
-        this.form.username = rememberedUsername;
-        this.form.password = rememberedPassword;
-      }
-
-    }
-
   }
   onRememberMeChange(): void {
     console.log("onRememberMeChange")
@@ -60,7 +44,6 @@ export class LoginComponent implements OnInit {
       this.roles = user.roles;
       this.username = user.username;
       this.isLoggedIn = true;
-      // this.roles = this.storageService.getUser().roles;
     }
     
   }
@@ -85,17 +68,7 @@ export class LoginComponent implements OnInit {
     this.authService.login(username, password).subscribe({
       next: data => {
         this.storageService.saveUser(data);
-
-        if (this.rememberMe) {
-          // Store user credentials in LocalStorage
-          localStorage.setItem('rememberedUsername', username);
-          localStorage.setItem('rememberedPassword', password);
-        } else {
-          // Clear stored user credentials
-          localStorage.removeItem('rememberedUsername');
-          localStorage.removeItem('rememberedPassword');
-        }
-
+        localStorage.setItem('rememberedUsername', username);
         this.isLoginFailed = false;
         this.isLoggedIn = true;
         this.roles = this.storageService.getUser().roles;

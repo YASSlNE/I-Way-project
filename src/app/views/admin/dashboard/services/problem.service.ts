@@ -7,10 +7,9 @@ import { Observable } from 'rxjs';
 
 
 const AUTH_API = 'http://localhost:8080/api/problem';
-
 const userJson = localStorage.getItem('auth-user');
 const user = JSON.parse(userJson || '{}');
-
+const userName = localStorage.getItem('rememberedUsername');
 const headers = new HttpHeaders({
   "authorization": "Bearer " + user.token,
 })
@@ -21,15 +20,17 @@ const headers = new HttpHeaders({
 })
 export class ProblemService {
 
-
-  
-
   constructor(private http: HttpClient) {}
 
   getAllProblems(): Observable<any>{
+    console.log("=================="+userName)
     console.log('Token:', headers.get('Authorization'));
-
     return this.http.get(AUTH_API, {headers: headers, withCredentials: true});
-    
   }
+
+  getAllProblemsByUser(): Observable<any>{
+    console.log('Token:', headers.get('Authorization'));
+    return this.http.get(AUTH_API + '/user/'+ userName, {headers: headers, withCredentials: true});
+  }
+
 }

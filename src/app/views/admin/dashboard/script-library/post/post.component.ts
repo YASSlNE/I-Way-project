@@ -24,19 +24,13 @@ export class PostComponent {
 
   @Input() title!: string;
   @Input() solutions!: string[]; // Use an appropriate type for your child post data
+  @Input() username!: string;
   showChildPosts: boolean = false;
 
   async onPostClicked() {
+    console.log("solutions===============-")
+    console.log(this.solutions)
     this.showChildPosts = !this.showChildPosts;
-    this.problemService.getAllProblemsByUser().subscribe({
-      next: (data) => {
-        console.log(data);
-      }, error : (err) => {
-      console.log(err);
-    }
-  }
-    )
-  
   
   }
 }

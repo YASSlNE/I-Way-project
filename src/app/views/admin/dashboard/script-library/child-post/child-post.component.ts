@@ -1,17 +1,25 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import {
   MonacoEditorComponent,
   MonacoEditorConstructionOptions,
   MonacoEditorLoaderService,
 } from '@materia-ui/ngx-monaco-editor';
+import { timeout } from 'rxjs';
 
 @Component({
   selector: 'app-child-post',
   templateUrl: './child-post.component.html',
   styleUrls: ['./child-post.component.css']
 })
-export class ChildPostComponent {
-  @Input() content!: string;
+export class ChildPostComponent implements OnInit{
+
+
+  ngOnInit(): void {
+    this.solutionCode = this.content["code"];
+    this.solutionDescription = this.content["description"]
+  }
+
+  @Input() content!: any;
 
   @ViewChild(MonacoEditorComponent, { static: false })
   monacoComponent!: MonacoEditorComponent;
@@ -24,12 +32,10 @@ export class ChildPostComponent {
     readOnly: true,
   };
 
-  solutionCode: any = '<h1>Solution</h1>';
+  solutionCode: any;
   showTabs = false;
+  solutionDescription: any;
 
-  toggleTabs() {
-    this.showTabs = !this.showTabs;
-  }
 
 
   

@@ -1,7 +1,8 @@
 <div class="flex justify-between items-center bg-white w-full rounded-lg shadow-xl p-6 w-full px-4 text-center mt-4 !bg-gray-700 relative">
     <div class="flex-grow flex items-center">
       <div class="h-full w-1 bg-white mr-4"></div>
-      <p class="text-left text-white font-sans text-xl">{{ title }}</p>
+      <p class="text-left text-white font-sans text-xl">{{ title }} {{username}}</p>
+      <!-- <h1></h1> -->
     </div>
     <button class="bg-red-500 hover:bg-red-700 text-white font-bold rounded h-[30px] w-[100px] mr-[10px]">Delete</button>
     <button class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold rounded h-[30px] w-[100px] mr-[10px]">Modify</button>
@@ -12,5 +13,11 @@
   </div>
   
   <ng-container *ngIf="showChildPosts">
-    <app-child-post [@fadeInOut] *ngFor="let content of solutions" [content]="content"></app-child-post>
+    <ng-container *ngIf="solutions.length > 0; else noSolutions">
+      <app-child-post [@fadeInOut] *ngFor="let content of solutions" [content]="content"></app-child-post>
+    </ng-container>
+    <ng-template #noSolutions>
+      <p class="text-white">No solutions available.</p>
+    </ng-template>
   </ng-container>
+  

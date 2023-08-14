@@ -63,7 +63,10 @@ import { RouterModule } from '@angular/router';
 import { ScriptLibraryComponent } from './views/admin/dashboard/script-library/script-library.component';
 import { PostComponent } from './views/admin/dashboard/script-library/post/post.component';
 import { ChildPostComponent } from './views/admin/dashboard/script-library/child-post/child-post.component';
+import { ProblemFormModalComponent } from './views/admin/dashboard/script-library/problem-form-modal/problem-form-modal.component';
 
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 @NgModule({
   declarations: [
@@ -107,9 +110,10 @@ import { ChildPostComponent } from './views/admin/dashboard/script-library/child
     CrudGeneratorComponent,
     ScriptLibraryComponent,
     PostComponent,
-    ChildPostComponent
+    ChildPostComponent,
+    ProblemFormModalComponent
   ],
-  imports: [RouterModule, ReactiveFormsModule, BrowserModule, AppRoutingModule, FormsModule, HttpClientModule,MonacoEditorModule, BrowserAnimationsModule, MatDialogModule],
+  imports: [RouterModule, ReactiveFormsModule, BrowserModule, AppRoutingModule, FormsModule, HttpClientModule,MonacoEditorModule, BrowserAnimationsModule, MatDialogModule, MatFormFieldModule, MatInputModule],
   providers: [LoginComponent, {
     provide: MONACO_PATH,
     useValue: 'https://unpkg.com/monaco-editor@0.36.1/min/vs',

@@ -40,4 +40,10 @@ export class ProblemService {
   getUserByProblemId(id: number): Observable<any>{
     return this.http.get(AUTH_API+'/id/'+ id, {headers: headers, withCredentials: true});
   }
+
+  addProblem(description: string): Observable<any>{
+    return this.http.post(AUTH_API+'/create', {
+      description: description
+    }, {headers: headers, withCredentials: true});
+  }
 }

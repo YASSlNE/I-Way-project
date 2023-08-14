@@ -3,9 +3,17 @@
     <h2 class="text-2xl font-semibold mt-2 text-white font-sans">Script Library</h2>
   </div>
 
-  <div class="flex justify-center mt-4">
-      <button class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">Add problem</button>
-  </div>
 
+
+
+
+
+
+
+  
+  <div class="flex justify-center mt-4">
+    <button (click)="openAddProblemModal()" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">Add problem</button>
+  </div>
+  
   <app-post *ngFor="let problem of problems; let i = index" [title]="problem.title" [solutions]="problem.solutions" [username]="problem.username"></app-post>
 </div>

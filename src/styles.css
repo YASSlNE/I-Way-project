@@ -3,3 +3,10 @@
 @tailwind utilities;
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+.mat-dialog-container {
+    background-color: #333; /* Change the background color */
+    color: white; /* Change the text color */
+    font-family: Arial, sans-serif; /* Change the font family */
+    padding: 20px; /* Add padding to the dialog content */
+  }
+  

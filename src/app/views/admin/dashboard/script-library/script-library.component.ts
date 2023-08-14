@@ -1,48 +1,61 @@
 import { Component, OnInit } from '@angular/core';
-import { ProblemService } from '../services/problem.service';
 import { MatDialog } from '@angular/material/dialog';
-import { ProblemFormModalComponent } from './problem-form-modal/problem-form-modal.component';
+import { ProblemService } from '../services/problem.service';
 import { StorageService } from 'src/app/views/auth/services/storage.service';
+import { ProblemFormModalComponent } from './problem-form-modal/problem-form-modal.component';
+
 @Component({
   selector: 'app-script-library',
   templateUrl: './script-library.component.html',
-  styleUrls: ['./script-library.component.css']
+  styleUrls: ['./script-library.component.css'],
 })
 export class ScriptLibraryComponent implements OnInit {
+  problems: any[] = [];
+
+  constructor(
+    private storageService: StorageService,
+    private problemService: ProblemService,
+    private dialog: MatDialog
+  ) {}
+
+  ngOnInit(): void {
+    this.loadProblemsForUser();
+  }
+
+  // Open the "Add Problem" modal
   openAddProblemModal() {
     const dialogRef = this.dialog.open(ProblemFormModalComponent, {
       height: '40%',
       width: '50%',
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.problemService.addProblem(result).subscribe({
-          next: (data) => {
-
-            console.log(data);
-            this.problems.unshift({
-              title: data.description + ' ' + data.id,
-              solutions: data.solutions,
-              username: this.storageService.getUser().username,
-              showChildPosts: false
-            });
-          }, error: (err) => {
-            console.log(err);
-          }
-        });
+        this.addProblem(result);
       }
     });
   }
 
-  ngOnInit(): void {
-    this.loadProblemsForUser();
+  // Add a new problem to the problems array
+  addProblem(data: any) {
+    this.problemService.addProblem(data).subscribe({
+      next: (response) => {
+        const newProblem = {
+          id: response.id,
+          title: response.description,
+          solutions: response.solutions,
+          username: this.storageService.getUser().username,
+          showChildPosts: false,
+        };
+        this.problems.unshift(newProblem);
+      },
+      error: (err) => {
+        console.log(err);
+      },
+    });
   }
 
-  constructor(private storageService: StorageService, private problemService: ProblemService, private dialog: MatDialog) {}
-
-  problems: any = [];
-
+  // Toggle the display of child posts
   onPostClicked(index: number) {
     this.problems[index].showChildPosts = !this.problems[index].showChildPosts;
   }
@@ -50,27 +63,36 @@ export class ScriptLibraryComponent implements OnInit {
   async loadProblemsForUser() {
     try {
       const data = await this.problemService.getAllProblems().toPromise();
-      
-      const userPromises = data.map((problem: { id: number; }) =>
+      const userPromises = data.map((problem: { id: number }) =>
         this.problemService.getUserByProblemId(problem.id).toPromise()
       );
-      
       const userResponses = await Promise.all(userPromises);
-  
+
       for (let i = 0; i < data.length; i++) {
         const user = userResponses[i];
         const problem = data[i];
-  
-        this.problems.unshift({
-          title: problem.description + ' ' + problem.id,
+
+        const newProblem = {
+          id: problem.id,
+          title: problem.description,
           solutions: problem.solutions,
           username: user.username,
-          showChildPosts: false
-        });
+          showChildPosts: false,
+        };
+        this.problems.unshift(newProblem);
       }
     } catch (error) {
       console.log(error);
     }
   }
-  
+
+  onProblemDeleted(problemId: number) {
+    // Find the index of the deleted problem in the problems array
+    const index = this.problems.findIndex(problem => problem.id === problemId);
+    
+    if (index !== -1) {
+      this.problems.splice(index, 1); // Remove the deleted problem from the array
+    }
+  }
+
 }

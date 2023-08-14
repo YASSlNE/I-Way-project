@@ -18,9 +18,6 @@ export class ProblemFormModalComponent {
   }
 
   onSubmitClick(): void {
-    // Here, you can handle the form submission logic,
-    // such as sending the description to a service.
-    // For this example, let's just close the modal.
     this.dialogRef.close(this.description);
   }
 

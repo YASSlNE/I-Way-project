@@ -15,5 +15,5 @@
     <button (click)="openAddProblemModal()" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">Add problem</button>
   </div>
   
-  <app-post *ngFor="let problem of problems; let i = index" [title]="problem.title" [solutions]="problem.solutions" [username]="problem.username"></app-post>
+  <app-post *ngFor="let problem of problems; let i = index" [id]="problem.id"  [title]="problem.title" [solutions]="problem.solutions" [username]="problem.username" (problemDeleted)="onProblemDeleted($event)"></app-post>
 </div>

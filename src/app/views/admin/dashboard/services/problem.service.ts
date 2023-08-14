@@ -52,4 +52,11 @@ export class ProblemService {
     console.log("======================================");
     return this.http.delete(AUTH_API+'/delete/'+id, {headers: headers, withCredentials: true});
   }
+
+
+  modifyProblem(id: number, description: string): Observable<any>{
+    return this.http.put(AUTH_API+'/update/'+id, {
+      description: description
+    }, {headers: headers, withCredentials: true});
+  }
 }

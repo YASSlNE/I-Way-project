@@ -1,0 +1,16 @@
+<h2 class="text-2xl font-semibold mt-2 text-gray-700 text-center">Modify problem </h2>
+    <div class="flex items-center">
+        <mat-dialog-content>
+            <mat-form-field class="w-[700px]">
+              <textarea matInput placeholder="Description" [(ngModel)]="description"></textarea>
+            </mat-form-field>
+          </mat-dialog-content>
+          
+    </div>
+    <mat-dialog-actions align="end">
+      
+      <button mat-button (click)="onCancelClick()"class="bg-red-500 hover:bg-red-700 text-white font-bold rounded h-[30px] w-[100px] mr-[10px]">Cancel</button>
+
+      <button mat-button (click)="onSubmitClick()" class="bg-blue-600 hover:bg-blue-800 text-white font-bold rounded h-[30px] w-[100px] mr-[70px]" cdkFocusInitial>Subtmit</button>
+
+    </mat-dialog-actions>

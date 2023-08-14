@@ -1,0 +1,30 @@
+<h2 class="text-2xl font-semibold mt-2 text-gray-700 text-center">Modify</h2>
+
+<div class="flex items-center">
+  <mat-dialog-content>
+    <h3 class="text-xl font-semibold mb-2">Description</h3>
+    
+    <mat-form-field class="w-[700px]">
+      <textarea matInput placeholder="Description" [(ngModel)]="description"></textarea>
+    </mat-form-field>
+
+    <mat-form-field class="w-[700px]">
+      <mat-label>Language</mat-label>
+      <mat-select placeholder="Select a language" [(ngModel)]="language" (selectionChange)="onLanguageSelected($event.value)">
+        <mat-option *ngFor="let lang of programmingLanguages" [value]="lang.value">
+          <i [class]="lang.icon"></i> {{ lang.display }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+  </mat-dialog-content>
+</div>
+
+<div class="w-full h-[420px]">
+  <ngx-monaco-editor [options]="editorOptions" [(ngModel)]="solutionCode"></ngx-monaco-editor>
+</div>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancelClick()" class="bg-red-500 hover:bg-red-700 text-white font-bold rounded h-[30px] w-[100px] mr-[10px]">Cancel</button>
+  <button mat-button (click)="onSubmitClick()" class="bg-blue-600 hover:bg-blue-800 text-white font-bold rounded h-[30px] w-[100px] mr-[70px]" cdkFocusInitial>Submit</button>
+</mat-dialog-actions>

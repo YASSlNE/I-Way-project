@@ -2,6 +2,9 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { ProblemService } from '../../services/problem.service';
 import { firstValueFrom } from 'rxjs';
+import { AddScriptModalFormComponent } from '../add-script-modal-form/add-script-modal-form.component';
+import { MatDialog } from '@angular/material/dialog';
+import { ModifyProblemModalFormComponent } from '../modify-problem-modal-form/modify-problem-modal-form.component';
 
 @Component({
   selector: 'app-post',
@@ -23,11 +26,51 @@ export class PostComponent {
 
 
 
-  constructor(private problemService : ProblemService){
-  }
+  constructor(private problemService : ProblemService,
+              private dialog : MatDialog) { }
+  
   addSolution() {
+    const dialogRef = this.dialog.open(AddScriptModalFormComponent, {
+      height: '80%',
+      width: '70%',
+    });
+
+    // dialogRef.afterClosed().subscribe(result => {
+    //   if (result) {
+    //     this.problemService.addSolution(this.id, result).subscribe({
+    //       next: (response) => {
+    //         this.solutions = response.solutions;
+    //       },
+    //       error: (err) => {
+    //         console.log(err);
+    //       },
+    //     });
+    //   }
+    // });
+
   }
   modifyProblem() {
+    const dialogRef = this.dialog.open(ModifyProblemModalFormComponent, {
+      height: '40%',
+      width: '50%',
+      data: {
+        title: this.title
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.problemService.modifyProblem(this.id, result).subscribe({
+          next: (response) => {
+            this.title = response.description;
+            this.solutions = response.solutions;
+          },
+          error: (err) => {
+            console.log(err);
+          },
+        });
+      }
+    });
   }
   deleteProblem() {
     

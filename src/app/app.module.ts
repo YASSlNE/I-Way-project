@@ -67,6 +67,10 @@ import { ProblemFormModalComponent } from './views/admin/dashboard/script-librar
 
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { AddScriptModalFormComponent } from './views/admin/dashboard/script-library/add-script-modal-form/add-script-modal-form.component';
+import { ModifyProblemModalFormComponent } from './views/admin/dashboard/script-library/modify-problem-modal-form/modify-problem-modal-form.component';
+import { MatSelectModule } from '@angular/material/select';
+import { MatOptionModule } from '@angular/material/core';
 
 @NgModule({
   declarations: [
@@ -111,9 +115,11 @@ import { MatInputModule } from '@angular/material/input';
     ScriptLibraryComponent,
     PostComponent,
     ChildPostComponent,
-    ProblemFormModalComponent
+    ProblemFormModalComponent,
+    AddScriptModalFormComponent,
+    ModifyProblemModalFormComponent
   ],
-  imports: [RouterModule, ReactiveFormsModule, BrowserModule, AppRoutingModule, FormsModule, HttpClientModule,MonacoEditorModule, BrowserAnimationsModule, MatDialogModule, MatFormFieldModule, MatInputModule],
+  imports: [MatSelectModule, MatOptionModule, RouterModule, ReactiveFormsModule, BrowserModule, AppRoutingModule, FormsModule, HttpClientModule,MonacoEditorModule, BrowserAnimationsModule, MatDialogModule, MatFormFieldModule, MatInputModule],
   providers: [LoginComponent, {
     provide: MONACO_PATH,
     useValue: 'https://unpkg.com/monaco-editor@0.36.1/min/vs',

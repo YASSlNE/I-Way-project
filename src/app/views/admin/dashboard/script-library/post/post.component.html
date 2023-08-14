@@ -1,23 +1,27 @@
 <div class="flex justify-between items-center bg-white w-full rounded-lg shadow-xl p-6 w-full px-4 text-center mt-4 !bg-gray-700 relative">
-    <div class="flex-grow flex items-center">
-      <div class="h-full w-1 bg-white mr-4"></div>
-      <p class="text-left text-white font-sans text-xl">{{ title }} {{username}}</p>
-      <!-- <h1></h1> -->
+  <div class="flex-grow flex items-center">
+    <div class="h-full w-1 bg-white mr-4"></div>
+    <div class="flex items-center"> <!-- Adjusted to a flex container -->
+      <i class="fas fa-user-circle text-gray-300 text-2xl mr-2 pb-[25px]"></i> <!-- Moved the icon here -->
+      <div class="flex flex-col">
+        <p class="text-left text-gray-800 font-sans text-xl">{{ username }}</p>
+        <p class="text-left text-white font-sans text-xl">{{ title }}</p>
+      </div>
     </div>
-    <button class="bg-red-500 hover:bg-red-700 text-white font-bold rounded h-[30px] w-[100px] mr-[10px]">Delete</button>
-    <button class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold rounded h-[30px] w-[100px] mr-[10px]">Modify</button>
-    <button class="bg-gray-600 hover:bg-gray-800 text-white font-bold rounded h-[30px] w-[100px] mr-[70px]">Add script</button>
-    <button (click)="onPostClicked()" class="absolute top-0 right-0 bottom-0 bg-transparent text-white shadow-lg px-5" [style.padding-right]="showChildPosts ? '26px' : ''" [style.padding-bottom]="showChildPosts ? '35px' : ''" [style.font-size]="showChildPosts ? '50px' : '50px'" style="border-left: 1px solid white; display: flex; align-items: center;">
-      {{ showChildPosts ? '_' : '+' }}
-    </button>
   </div>
-  
-  <ng-container *ngIf="showChildPosts">
-    <ng-container *ngIf="solutions.length > 0; else noSolutions">
-      <app-child-post [@fadeInOut] *ngFor="let content of solutions" [content]="content"></app-child-post>
-    </ng-container>
-    <ng-template #noSolutions>
-      <p class="text-white">No solutions available.</p>
-    </ng-template>
+  <button class="bg-red-500 hover:bg-red-700 text-white font-bold rounded h-[30px] w-[100px] mr-[10px]">Delete</button>
+  <button class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold rounded h-[30px] w-[100px] mr-[10px]">Modify</button>
+  <button class="bg-gray-600 hover:bg-gray-800 text-white font-bold rounded h-[30px] w-[100px] mr-[70px]">Add script</button>
+  <button (click)="onPostClicked()" class="absolute top-0 right-0 bottom-0 bg-transparent text-white shadow-lg px-5" [style.padding-right]="showChildPosts ? '26px' : ''" [style.padding-bottom]="showChildPosts ? '35px' : ''" [style.font-size]="showChildPosts ? '50px' : '50px'" style="border-left: 1px solid white; display: flex; align-items: center;">
+    {{ showChildPosts ? '_' : '+' }}
+  </button>
+</div>
+
+<ng-container *ngIf="showChildPosts">
+  <ng-container *ngIf="solutions.length > 0; else noSolutions">
+    <app-child-post [@fadeInOut] *ngFor="let content of solutions" [content]="content"></app-child-post>
   </ng-container>
-  
+  <ng-template #noSolutions>
+    <p class="text-white">No solutions available.</p>
+  </ng-template>
+</ng-container>

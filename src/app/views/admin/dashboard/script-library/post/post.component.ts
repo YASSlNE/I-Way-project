@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { ProblemService } from '../../services/problem.service';
 import { firstValueFrom } from 'rxjs';
@@ -17,23 +17,38 @@ import { ModifyProblemModalFormComponent } from '../modify-problem-modal-form/mo
       })),
       transition('void <=> *', animate(150))
     ])
-  ]
+  ],
+  changeDetection: ChangeDetectionStrategy.Default, 
 
 })
 export class PostComponent {
-
+  trackByFn(index: number, item: any): number {
+    return item.id; // Replace with the actual unique identifier of your content
+  }
+  
 
 
 
 
   constructor(private problemService : ProblemService,
-              private dialog : MatDialog) { }
+              private dialog : MatDialog,
+              private cdr : ChangeDetectorRef
+              ) { }
   
   addSolution() {
     const dialogRef = this.dialog.open(AddScriptModalFormComponent, {
       height: '80%',
       width: '70%',
+      data: {
+        id : this.id
+      }
     });
+
+    dialogRef.componentInstance.solutionAdded.subscribe((solutionData: any) => {
+      this.solutions.unshift(solutionData);
+    });
+    
+    
 
     // dialogRef.afterClosed().subscribe(result => {
     //   if (result) {

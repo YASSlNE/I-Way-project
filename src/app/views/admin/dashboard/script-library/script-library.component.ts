@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ProblemService } from '../services/problem.service';
 import { StorageService } from 'src/app/views/auth/services/storage.service';
 import { ProblemFormModalComponent } from './problem-form-modal/problem-form-modal.component';
+import { SolutionService } from '../services/solution.service';
 
 @Component({
   selector: 'app-script-library',
@@ -15,7 +16,8 @@ export class ScriptLibraryComponent implements OnInit {
   constructor(
     private storageService: StorageService,
     private problemService: ProblemService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private solutionService: SolutionService
   ) {}
 
   ngOnInit(): void {
@@ -64,18 +66,21 @@ export class ScriptLibraryComponent implements OnInit {
     try {
       const data = await this.problemService.getAllProblems().toPromise();
       const userPromises = data.map((problem: { id: number }) =>
-        this.problemService.getUserByProblemId(problem.id).toPromise()
+        Promise.all([
+          this.problemService.getUserByProblemId(problem.id).toPromise(),
+          this.solutionService.getSolutionsByProblem(problem.id).toPromise()
+        ])
       );
-      const userResponses = await Promise.all(userPromises);
-
+      const userAndSolutionsResponses = await Promise.all(userPromises);
+  
       for (let i = 0; i < data.length; i++) {
-        const user = userResponses[i];
+        const [user, solutions] = userAndSolutionsResponses[i];
         const problem = data[i];
-
+  
         const newProblem = {
           id: problem.id,
           title: problem.description,
-          solutions: problem.solutions,
+          solutions: solutions,
           username: user.username,
           showChildPosts: false,
         };
@@ -85,6 +90,7 @@ export class ScriptLibraryComponent implements OnInit {
       console.log(error);
     }
   }
+  
 
   onProblemDeleted(problemId: number) {
     // Find the index of the deleted problem in the problems array

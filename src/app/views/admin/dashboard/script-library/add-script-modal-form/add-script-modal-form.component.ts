@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { Component, EventEmitter, Inject, Output, ViewChild } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatSelectChange } from '@angular/material/select';
-import { MonacoEditorConstructionOptions } from '@materia-ui/ngx-monaco-editor';
+import { MonacoEditorComponent, MonacoEditorConstructionOptions } from '@materia-ui/ngx-monaco-editor';
+import { SolutionService } from '../../services/solution.service';
 
 @Component({
   selector: 'app-add-script-modal-form',
@@ -10,6 +11,8 @@ import { MonacoEditorConstructionOptions } from '@materia-ui/ngx-monaco-editor';
 })
 export class AddScriptModalFormComponent {
 
+    
+  
 
     description: string = '';
     solutionCode: any;
@@ -41,10 +44,18 @@ export class AddScriptModalFormComponent {
       { value: 'html', display: 'HTML', icon: 'devicon-html5-plain colored' },
       { value: 'css', display: 'CSS', icon: 'devicon-css3-plain colored' },
     ];
+    @ViewChild(MonacoEditorComponent, { static: false })
+    monacoComponent!: MonacoEditorComponent;
+
     
     
-    constructor(public dialogRef: MatDialogRef<AddScriptModalFormComponent>) {}
-  
+    constructor(private solutionService : SolutionService,
+                public dialogRef: MatDialogRef<AddScriptModalFormComponent>,
+                @Inject(MAT_DIALOG_DATA) public data: { id: any }) {
+      
+    }
+    @Output() solutionAdded: EventEmitter<any> = new EventEmitter<any>();
+
     ngOnInit(): void {}
   
     onCancelClick(): void {
@@ -52,15 +63,29 @@ export class AddScriptModalFormComponent {
     }
   
     onSubmitClick(): void {
+      this.solutionService.addSolution(this.data.id, this.solutionCode, this.description, this.language).subscribe({
+        next: (response) => {
+          console.log(response);
+          this.solutionAdded.emit(response); 
+        },
+        error: (err) => {
+          console.log(err);
+        },
+      });
+      
       this.dialogRef.close(this.description);
+    }
+    loadMonacoLanguage(language: string) {
+      const model = this.monacoComponent.editor.getModel();
+      if (model) {
+        monaco.editor.setModelLanguage(model, language);
+      }
     }
 
     onLanguageSelected(selectedLanguage: string) {
       // You can access the selected value directly without using 'event'
-      console.log('Selected language:', selectedLanguage);
-    
-      // Add your desired logic here
-      // For example, you can update the monaco editor's language based on the selected language
+      console.log('Selected language:', selectedLanguage);    
+      this.loadMonacoLanguage(selectedLanguage);
       this.editorOptions.language = selectedLanguage;
     }
       

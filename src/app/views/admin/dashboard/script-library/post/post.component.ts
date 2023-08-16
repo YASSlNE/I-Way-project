@@ -23,19 +23,27 @@ import { StorageService } from 'src/app/views/auth/services/storage.service';
 
 })
 export class PostComponent implements OnInit{
+  sortSolutions(solutions : any): any{
+    solutions.sort((a: any, b: any) => {
+      return b.score - a.score;
+    });
+  }
   onSolutionDownvoted($event: number) {
-    // Find the solution in the solutions array
     const solutionToUpdate = this.solutions.find((solution:any) => solution.id === $event);
     if (solutionToUpdate) {
       solutionToUpdate.score--; // Update the score
     }
+    // this.solutions = this.sortSolutions(this.solutions);
 }
   onSolutionUpvoted(solutionId: number) {
+
     // Find the solution in the solutions array
     const solutionToUpdate = this.solutions.find((solution:any) => solution.id === solutionId);
     if (solutionToUpdate) {
       solutionToUpdate.score++; // Update the score
     }
+    // this.solutions = this.sortSolutions(this.solutions);
+
   }
   trackByFn(index: number, item: any): number {
     return item.id;

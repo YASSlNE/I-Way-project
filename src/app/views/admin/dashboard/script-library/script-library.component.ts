@@ -45,7 +45,7 @@ export class ScriptLibraryComponent implements OnInit {
         const newProblem = {
           id: response.id,
           title: response.description,
-          solutions: response.solutions,
+          solutions: [],
           username: this.storageService.getUser().username,
           showChildPosts: false,
         };
@@ -76,7 +76,7 @@ export class ScriptLibraryComponent implements OnInit {
       for (let i = 0; i < data.length; i++) {
         const [user, solutions] = userAndSolutionsResponses[i];
         const problem = data[i];
-  
+        // const newSolutions = this.sortSolutions(solutions);
         const newProblem = {
           id: problem.id,
           title: problem.description,
@@ -90,6 +90,12 @@ export class ScriptLibraryComponent implements OnInit {
       console.log(error);
     }
   }
+
+  // sortSolutions(solutions : any){
+  //   solutions.sort((a: any, b: any) => {
+  //     return b.score - a.score;
+  //   });
+  // }
   
 
   onProblemDeleted(problemId: number) {

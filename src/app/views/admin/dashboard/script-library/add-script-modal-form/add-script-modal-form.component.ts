@@ -54,14 +54,14 @@ export class AddScriptModalFormComponent {
                 @Inject(MAT_DIALOG_DATA) public data: { id: any }) {
       
     }
-    @Output() solutionAdded: EventEmitter<any> = new EventEmitter<any>();
 
     ngOnInit(): void {}
   
     onCancelClick(): void {
       this.dialogRef.close();
     }
-  
+    @Output() solutionAdded: EventEmitter<any> = new EventEmitter<any>();
+
     onSubmitClick(): void {
       this.solutionService.addSolution(this.data.id, this.solutionCode, this.description, this.language).subscribe({
         next: (response) => {

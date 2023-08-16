@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, Input, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import {
   MonacoEditorComponent,
   MonacoEditorConstructionOptions,
@@ -19,28 +19,61 @@ export class ChildPostComponent implements AfterViewInit{
   solutionDescription: any;
   id : any;
   upvotingUsers : any = [];
+  currentUserVoted : boolean = false;
 
 
-  thumbsUp() {
-    let upvotingUser = JSON.parse(localStorage.getItem('auth-user') || '{}').id; 
-    let upvotingUserString = JSON.stringify(upvotingUser);
-    if (!this.upvotingUsers.some((user: any) => JSON.stringify(user.id) === upvotingUserString)) {
-      // User is not in the upvotingUsers list, add them
-      this.upvotingUsers.push(upvotingUser);
-      this.solutionService.upVoteSolution(this.id).subscribe(
-        data => {
-          console.log(data);
-        },
-        err => {
-          console.log(err);
-        }
-      );
+//   thumbsUp() {
+    
+//     let upvotingUser = JSON.parse(localStorage.getItem('auth-user') || '{}').id; 
+//     let upvotingUserString = JSON.stringify(upvotingUser);
+//     if ((!this.upvotingUsers.some((user: any) => JSON.stringify(user.id) === upvotingUserString)) && !this.currentUserVoted) {
+//       this.currentUserVoted = true;
+//       this.upvotingUsers.push(upvotingUser);
+//       this.solutionService.upVoteSolution(this.id).subscribe(
+//         data => {
+//           console.log(data);
+//         },
+//         err => {
+//           console.log(err);
+//         }
+//       );
 
-    this.score += 1;
+//     this.score += 1;
+//   }
+//   else{
+//     alert("You have already upvoted this solution")
+//   }
+// }
+@Output() solutionUpvoted: EventEmitter<number> = new EventEmitter<number>();
+@Output() solutionDownVoted: EventEmitter<number> = new EventEmitter<number>();
+async thumbsUp() {
+  if (!this.currentUserVoted) {
+    this.currentUserVoted = true;
+    await this.solutionService.upVoteSolution(this.id).subscribe(
+      data => {
+        console.log(data);
+        this.solutionUpvoted.emit(this.id);
+      },
+      err => {
+        console.log(err);
+      }
+    );
+  this.score ++;
   }
-  else{
-    alert("You have already upvoted this solution")
+  else if(this.currentUserVoted){
+    this.currentUserVoted = false;
+    await this.solutionService.downVoteSolution(this.id).subscribe(
+      data => {
+        console.log(data);
+        this.solutionDownVoted.emit(this.id);
+      },
+      err => {
+        console.log(err);
+      }
+    );
+    this.score--;
   }
+
 }
   language: any;
   score! : number;
@@ -51,16 +84,16 @@ export class ChildPostComponent implements AfterViewInit{
 
 
   ngAfterViewInit(): void {
-    // This lifecycle hook ensures that the view (including child components) is fully initialized
+
     this.id = this.content['id'];
     this.language = this.content['language'];
     this.solutionCode = this.content['code'];
     this.solutionDescription = this.content['description'];
     this.score = this.content['score'];
     this.upvotingUsers = this.content['upvotingUsers'];
+    if(this.upvotingUsers != null)
+      this.currentUserVoted = this.upvotingUsers.some((user: any) => JSON.stringify(user.id) === JSON.stringify(JSON.parse(localStorage.getItem('auth-user') || '{}').id));
 
-    // Call onLanguageSelected here, after the view is fully initialized
-    // Use a timeout to ensure the Monaco Editor has time to fully load
     setTimeout(() => {
       this.onLanguageSelected(this.language);
       this.cdr.detectChanges(); // Mark the view for check

@@ -20,11 +20,12 @@
 </div>
 
 <ng-container *ngIf="showChildPosts">
-  <ng-container *ngIf="solutions.length > 0; else noSolutions">
-    <app-child-post [@fadeInOut] *ngFor="let content of solutions.reverse(); trackBy: trackByFn" [content]="content"></app-child-post>
+  <ng-container *ngIf="solutions != null && solutions.length > 0; else noSolutions">
+    <app-child-post (solutionDownVoted)="onSolutionDownvoted($event)" (solutionUpvoted)="onSolutionUpvoted($event)"  [@fadeInOut] *ngFor="let content of solutions.reverse(); trackBy: trackByFn" [content]="content"></app-child-post>
   </ng-container>
   <ng-template #noSolutions>
     <p class="text-white">No solutions available.</p>
   </ng-template>
 </ng-container>
+
 </div>

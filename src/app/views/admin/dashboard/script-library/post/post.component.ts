@@ -23,6 +23,20 @@ import { StorageService } from 'src/app/views/auth/services/storage.service';
 
 })
 export class PostComponent implements OnInit{
+  onSolutionDownvoted($event: number) {
+    // Find the solution in the solutions array
+    const solutionToUpdate = this.solutions.find((solution:any) => solution.id === $event);
+    if (solutionToUpdate) {
+      solutionToUpdate.score--; // Update the score
+    }
+}
+  onSolutionUpvoted(solutionId: number) {
+    // Find the solution in the solutions array
+    const solutionToUpdate = this.solutions.find((solution:any) => solution.id === solutionId);
+    if (solutionToUpdate) {
+      solutionToUpdate.score++; // Update the score
+    }
+  }
   trackByFn(index: number, item: any): number {
     return item.id;
   }
@@ -46,23 +60,13 @@ export class PostComponent implements OnInit{
     });
 
     dialogRef.componentInstance.solutionAdded.subscribe((solutionData: any) => {
-      this.solutions.push(solutionData);
+        this.solutions.push(solutionData);
     });
-    
-    
 
-    // dialogRef.afterClosed().subscribe(result => {
-    //   if (result) {
-    //     this.problemService.addSolution(this.id, result).subscribe({
-    //       next: (response) => {
-    //         this.solutions = response.solutions;
-    //       },
-    //       error: (err) => {
-    //         console.log(err);
-    //       },
-    //     });
-    //   }
-    // });
+    
+    
+    
+  
 
   }
   modifyProblem() {
@@ -111,7 +115,7 @@ export class PostComponent implements OnInit{
 
   }
   @Input() title!: string;
-  @Input() solutions!: string[]; // Use an appropriate type for your child post data
+  @Input() solutions: any[] = [];
   @Input() username!: string;
   @Input() id!: number;
   @Output() problemDeleted: EventEmitter<number> = new EventEmitter<number>();

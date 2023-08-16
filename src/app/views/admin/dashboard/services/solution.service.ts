@@ -14,6 +14,13 @@ const headers = new HttpHeaders({
   providedIn: 'root'
 })
 export class SolutionService {
+  downVoteSolution(id: any) {
+    return this.http.put(
+      AUTH_API+'/downVote/'+id,
+      {},
+      {headers: headers, withCredentials: true}
+    )
+  }
 
   constructor(private http: HttpClient, private storageService: StorageService) {}
 

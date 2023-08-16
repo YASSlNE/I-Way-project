@@ -38,6 +38,14 @@
               <a href="/">Click here to go to the home page</a>.
             </p>
           </div>
+          <div *ngIf="isLoggedIn">
+            <div class="flex flex-col items-center">
+              <div class="mt-2">
+                <p>Redirecting to the home page...</p>
+              </div>
+            </div>
+          </div>
+          
 
           <div class="mt-4 flex flex-col items-center" *ngIf="(!isLoggedIn && isLoading)">
             <img src="/assets/img/spinner.gif" width="50" height="50" alt="Loading..." />

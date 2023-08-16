@@ -1,10 +1,11 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { ProblemService } from '../../services/problem.service';
 import { firstValueFrom } from 'rxjs';
 import { AddScriptModalFormComponent } from '../add-script-modal-form/add-script-modal-form.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ModifyProblemModalFormComponent } from '../modify-problem-modal-form/modify-problem-modal-form.component';
+import { StorageService } from 'src/app/views/auth/services/storage.service';
 
 @Component({
   selector: 'app-post',
@@ -21,18 +22,18 @@ import { ModifyProblemModalFormComponent } from '../modify-problem-modal-form/mo
   changeDetection: ChangeDetectionStrategy.Default, 
 
 })
-export class PostComponent {
+export class PostComponent implements OnInit{
   trackByFn(index: number, item: any): number {
-    return item.id; // Replace with the actual unique identifier of your content
+    return item.id;
   }
-  
 
-
-
-
+  ngOnInit(): void {
+    this.hasRightToModifyOrDelete  = this.storageService.getUser()["username"] == this.username;
+  }
   constructor(private problemService : ProblemService,
               private dialog : MatDialog,
-              private cdr : ChangeDetectorRef
+              private cdr : ChangeDetectorRef,
+              private storageService: StorageService
               ) { }
   
   addSolution() {
@@ -45,7 +46,7 @@ export class PostComponent {
     });
 
     dialogRef.componentInstance.solutionAdded.subscribe((solutionData: any) => {
-      this.solutions.unshift(solutionData);
+      this.solutions.push(solutionData);
     });
     
     
@@ -89,19 +90,17 @@ export class PostComponent {
   }
   deleteProblem() {
     
-      // if (confirm('Are you sure you want to delete?')) {
-      //   this.authService.logout().subscribe({
-      //     next: () => {
-      //       this.storageService.clean();
-      //       console.log('User logged out successfully')
-      //       window.location.reload();
-      //       this.router.navigate(['/auth/login']);
-      //     },
-      //     error: err => {
-      //       console.log(err);
-      //     }
-      //   });
-      // }
+      if (confirm('Are you sure you want to delete?')) {
+        this.problemService.deleteProblem(this.id).subscribe(
+          response=>{
+            console.log(response);
+            this.problemDeleted.emit(this.id);
+          },
+          error =>{
+            console.error(error)
+          }
+        );
+      }
     
 
 
@@ -109,15 +108,7 @@ export class PostComponent {
 
 
 
-    this.problemService.deleteProblem(this.id).subscribe(
-      response=>{
-        console.log(response);
-        this.problemDeleted.emit(this.id);
-      },
-      error =>{
-        console.error(error)
-      }
-    );
+
   }
   @Input() title!: string;
   @Input() solutions!: string[]; // Use an appropriate type for your child post data
@@ -125,6 +116,9 @@ export class PostComponent {
   @Input() id!: number;
   @Output() problemDeleted: EventEmitter<number> = new EventEmitter<number>();
 
+
+  hasRightToModifyOrDelete : boolean = true;
+  
   showChildPosts: boolean = false;
 
   async onPostClicked() {

@@ -16,15 +16,23 @@
       class="md:flex hidden flex-row flex-wrap items-center lg:ml-auto mr-3"
     >
       <div class="relative flex w-full flex-wrap items-stretch">
-        <span
-          class="z-10 h-full leading-snug font-normal absolute text-center text-blueGray-300 absolute bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-3"
-          ><i class="fas fa-search"></i
-        ></span>
-        <input
-          type="text"
-          placeholder="Search here..."
-          class="border-0 px-3 py-3 placeholder-blueGray-300 text-slate-600 relative bg-white bg-white rounded text-sm shadow outline-none focus:outline-none focus:ring w-full pl-10"
-        />
+        <ul class="flex">
+          <li class="flex items-center">
+            <div class="alert alert-success" *ngIf="isLoggedIn">
+              Logged in as {{ username }}.
+            </div>
+          </li>
+          <li class="flex items-center" *ngIf="isLoggedIn">
+            <button
+              class="bg-white text-slate-700 active:bg-slate-50 text-xs font-bold uppercase px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none lg:mr-1 lg:mb-0 ml-3 mb-3 ease-linear transition-all duration-150"
+              type="button"
+              (click)="onLogout()"
+            >
+              <i class="fas fa-sign-out-alt"></i>
+            </button>
+          </li>
+        </ul>
+        
       </div>
     </form>
     

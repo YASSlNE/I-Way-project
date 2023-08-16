@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { StorageService } from '../services/storage.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -29,8 +30,12 @@ export class LoginComponent implements OnInit {
   rememberMe: boolean=false;
   username: any;
 
-  constructor(private authService: AuthService, private storageService: StorageService) {
-  }
+  constructor(
+    private authService: AuthService,
+    private storageService: StorageService,
+    private router: Router // Inject the Router
+  ) { }
+    
   onRememberMeChange(): void {
     console.log("onRememberMeChange")
     localStorage.setItem('rememberMe', this.rememberMe.toString());
@@ -44,6 +49,10 @@ export class LoginComponent implements OnInit {
       this.roles = user.roles;
       this.username = user.username;
       this.isLoggedIn = true;
+      setTimeout(() => {
+        this.router.navigate(['admin/dashboard']); // Redirect to the desired route
+      }, 2000); // Wait for 2 seconds before redirecting
+  
     }
     
   }

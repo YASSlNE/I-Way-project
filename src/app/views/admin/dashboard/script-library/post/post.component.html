@@ -9,8 +9,8 @@
       </div>
     </div>
   </div>
-  <button (click)="deleteProblem()" class="bg-red-500 hover:bg-red-700 text-white font-bold rounded h-[30px] w-[100px] mr-[10px]">Delete</button>
-  <button (click)="modifyProblem()" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold rounded h-[30px] w-[100px] mr-[10px]">Modify</button>
+  <button *ngIf="hasRightToModifyOrDelete" (click)="deleteProblem()" class="bg-red-500 hover:bg-red-700 text-white font-bold rounded h-[30px] w-[100px] mr-[10px]">Delete</button>
+  <button *ngIf="hasRightToModifyOrDelete" (click)="modifyProblem()" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold rounded h-[30px] w-[100px] mr-[10px]">Modify</button>
   <button (click)="addSolution()" class="bg-gray-600 hover:bg-gray-800 text-white font-bold rounded h-[30px] w-[100px] mr-[70px]">Add script</button>
   <button (click)="onPostClicked()" class="absolute top-0 right-0 bottom-0 bg-transparent text-white shadow-lg px-5" [style.padding-right]="showChildPosts ? '26px' : ''" [style.padding-bottom]="showChildPosts ? '35px' : ''" [style.font-size]="showChildPosts ? '50px' : '50px'" style="border-left: 1px solid white; display: flex; align-items: center;">
     {{ showChildPosts ? '_' : '+' }}

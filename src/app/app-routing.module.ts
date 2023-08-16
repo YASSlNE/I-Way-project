@@ -30,7 +30,7 @@ import { ScriptLibraryComponent } from "./views/admin/dashboard/script-library/s
 const routes: Routes = [
   // admin views
   {
-    path: "admin",
+    path: "",
     component: AdminComponent,
     children: [
       { path: "dashboard", component: DashboardComponent },

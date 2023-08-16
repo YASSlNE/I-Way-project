@@ -1,6 +1,21 @@
-<div class="ml-[210px] w-3/4 rounded-lg shadow-xl p-2 mt-16 my-4 bg-gray-700">
-  <!-- Tab Switcher -->
+<div class="mt-4 my-4">
+  <div class="flex flex-col relative ml-[65px] mt-[50px]">
+    <button (click)="thumbsUp()" class="mb-2 absolute top-0 transform -translate-y-1/2 ">
+      <span class="flex material-symbols-outlined icon">
+        thumb_up
+      </span>
+    </button>
+    <div class="text-white absolute ml-[20px] mt-[50px]">
+      {{score}}
+    </div>
+  </div>
+
+  <div class="ml-[210px] w-3/4 rounded-lg shadow-xl p-2 bg-gray-700">
+    <!-- Tab Switcher -->
+  
   <div class="flex justify-between mb-4">
+
+    
     <button
       class="flex-1 px-4 py-2 rounded-l-xl bg-gray-800 text-white"
       [class.bg-gray-800]="activeTab === 'code'"
@@ -30,6 +45,9 @@
   <div class="py-3" *ngIf="activeTab === 'description'">
     <h1 class="text-white">
       {{ solutionDescription }}
+      
     </h1>
   </div>
+</div>
+
 </div>

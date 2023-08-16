@@ -1,10 +1,10 @@
 <div
-  class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-xl rounded-lg mt-16"
+  class="relative flex flex-col min-w-0 break-words bg-gray-800 w-full mb-6 shadow-xl rounded-lg mt-16"
 >
   <div class="px-6">
     <div class="flex flex-wrap justify-center">
       <div class="w-full px-4 flex justify-center">
-        <h2 class="text-2xl font-semibold mt-2">Form Generator</h2>
+        <h2 class="text-2xl font-semibold mt-2 text-white">Form Generator</h2>
       </div>
 
       <div class="w-full px-4 text-center mt-4">
@@ -12,7 +12,7 @@
           <div class="flex justify-center items-center">
             <div class="flex flex-col">
               <label
-                class="block text-gray-700 text-sm font-bold mb-2"
+                class="block text-white text-sm font-bold mb-2"
                 for="componentName"
                 >Component Name</label
               >
@@ -32,7 +32,7 @@
               style="margin-right: 125px"
             >
               <label
-                class="block text-gray-700 text-sm font-bold mb-2"
+                class="block text-white text-sm font-bold mb-2"
                 for="language"
                 >Language</label
               >
@@ -53,13 +53,12 @@
         </div>
 
         <div class="my-4 mb-6">
-          <h3 class="text-xl font-semibold mb-2">Form Elements</h3>
+          <h3 class="text-xl font-semibold mb-2 text-white">Form Elements</h3>
 
-          <!-- ... other parts of the code ... -->
 
           <div
             *ngFor="let element of formElements; let i = index"
-            class="my-2 p-4 border rounded-lg"
+            class="my-2 p-4 border-gray-700 rounded-lg bg-gray-700"
           >
             <div class="flex flex-col">
               <div class="flex mb-2">
@@ -71,7 +70,7 @@
 
                 <div class="flex-1 mr-2">
                   <label
-                    class="block text-gray-700 text-sm font-bold mb-1"
+                    class="block text-white text-sm font-bold mb-1"
                     [for]="'elementType_' + i"
                     >Element Type</label
                   >
@@ -99,7 +98,7 @@
 
                 <div class="flex-1 mr-2">
                   <label
-                    class="block text-gray-700 text-sm font-bold mb-1"
+                    class="block text-white text-sm font-bold mb-1"
                     [for]="'elementName_' + i"
                     >Element Name</label
                   >
@@ -112,7 +111,7 @@
                 </div>
                 <div class="flex-1">
                   <label
-                    class="block text-gray-700 text-sm font-bold mb-1"
+                    class="block text-white text-sm font-bold mb-1"
                     [for]="'validator_' + i"
                     >Validator</label
                   >

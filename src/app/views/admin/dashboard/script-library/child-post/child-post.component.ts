@@ -5,6 +5,7 @@ import {
   MonacoEditorLoaderService,
 } from '@materia-ui/ngx-monaco-editor';
 import { timeout } from 'rxjs';
+import { SolutionService } from '../../services/solution.service';
 
 @Component({
   selector: 'app-child-post',
@@ -12,18 +13,51 @@ import { timeout } from 'rxjs';
   styleUrls: ['./child-post.component.css']
 })
 export class ChildPostComponent implements AfterViewInit{
+
+  solutionCode: any;
+  showTabs = false;
+  solutionDescription: any;
+  id : any;
+  upvotingUsers : any = [];
+
+
+  thumbsUp() {
+    let upvotingUser = JSON.parse(localStorage.getItem('auth-user') || '{}').id; 
+    let upvotingUserString = JSON.stringify(upvotingUser);
+    if (!this.upvotingUsers.some((user: any) => JSON.stringify(user.id) === upvotingUserString)) {
+      // User is not in the upvotingUsers list, add them
+      this.upvotingUsers.push(upvotingUser);
+      this.solutionService.upVoteSolution(this.id).subscribe(
+        data => {
+          console.log(data);
+        },
+        err => {
+          console.log(err);
+        }
+      );
+
+    this.score += 1;
+  }
+  else{
+    alert("You have already upvoted this solution")
+  }
+}
   language: any;
+  score! : number;
 
-
-  constructor(private cdr: ChangeDetectorRef) {}
+  constructor(private cdr: ChangeDetectorRef,
+              private solutionService: SolutionService) {
+              }
 
 
   ngAfterViewInit(): void {
     // This lifecycle hook ensures that the view (including child components) is fully initialized
-
+    this.id = this.content['id'];
     this.language = this.content['language'];
     this.solutionCode = this.content['code'];
     this.solutionDescription = this.content['description'];
+    this.score = this.content['score'];
+    this.upvotingUsers = this.content['upvotingUsers'];
 
     // Call onLanguageSelected here, after the view is fully initialized
     // Use a timeout to ensure the Monaco Editor has time to fully load
@@ -60,11 +94,6 @@ export class ChildPostComponent implements AfterViewInit{
     automaticLayout: true,
     readOnly: true,
   };
-
-  solutionCode: any;
-  showTabs = false;
-  solutionDescription: any;
-
 
 
   

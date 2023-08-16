@@ -17,11 +17,12 @@ export class SolutionService {
 
   constructor(private http: HttpClient, private storageService: StorageService) {}
 
-  addSolution(id : number, code : any, description : any, language : any){
+  addSolution(id : number, code : any, description : any, language : any, score: any = 0){
     return this.http.post(AUTH_API+'/affectToProblem/'+id, {
       code : code,
       description : description,
-      language : language
+      language : language,
+      score: score
     }, {headers: headers, withCredentials: true});
   }
 
@@ -32,4 +33,13 @@ export class SolutionService {
       {headers: headers, withCredentials: true}
     )
   }
+
+  upVoteSolution(id : number){
+    return this.http.put(
+      AUTH_API+'/upVote/'+id,
+      {},
+      {headers: headers, withCredentials: true}
+    )
+  }
+  
 }

@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 @import url('https://cdn.jsdelivr.net/gh/devicons/devicon@v2.15.1/devicon.min.css');
-
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined');
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .mat-dialog-container {
@@ -11,4 +11,12 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     font-family: Arial, sans-serif; /* Change the font family */
     padding: 20px; /* Add padding to the dialog content */
   }
+  
+
+.icon {
+  font-family: 'Material Symbols Outlined', sans-serif;
+  font-size: 60px; /* Adjust this value to your preference */;
+  color: white;
+  font-weight : 200;
+}
   

@@ -59,7 +59,7 @@ export class LoginComponent implements OnInit {
 
 
   onRegistrationLogin(username : any, password : any): void{
-    this.authService.login(username, password).subscribe({
+    this.authService.login(username, password, false).subscribe({
       next: data => {
         this.storageService.saveUser(data);
         this.isLoggedIn = true;
@@ -74,7 +74,7 @@ export class LoginComponent implements OnInit {
 
     const { username, password } = this.form;
 
-    this.authService.login(username, password).subscribe({
+    this.authService.login(username, password, this.rememberMe).subscribe({
       next: data => {
         this.storageService.saveUser(data);
         localStorage.setItem('rememberedUsername', username);

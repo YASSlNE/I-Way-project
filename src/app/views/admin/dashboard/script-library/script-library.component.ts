@@ -12,7 +12,8 @@ import { SolutionService } from '../services/solution.service';
 })
 export class ScriptLibraryComponent implements OnInit {
   problems: any[] = [];
-
+  searchTerm: string = '';
+  filteredResults: any[] = []; 
   constructor(
     private storageService: StorageService,
     private problemService: ProblemService,
@@ -23,6 +24,23 @@ export class ScriptLibraryComponent implements OnInit {
   ngOnInit(): void {
     this.loadProblemsForUser();
   }
+  performSearch() {
+    if (!this.searchTerm.trim()) {
+      this.filteredResults = []; // Clear filtered results
+      return;
+    }
+
+    const searchTermLowerCase = this.searchTerm.toLowerCase();
+
+    this.filteredResults = this.problems.filter(problem =>
+      problem.title.toLowerCase().includes(searchTermLowerCase) ||
+      problem.solutions.some((solution: any) =>
+        solution.description.toLowerCase().includes(searchTermLowerCase)
+      )
+    );
+  }
+
+  
 
   // Open the "Add Problem" modal
   openAddProblemModal() {

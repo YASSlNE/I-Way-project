@@ -1,6 +1,9 @@
 import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
 
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { TokenExpiredInterceptor } from "./views/auth/token interceptor/tokenExpirationInterceptor";
+
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 
@@ -121,9 +124,15 @@ import { MatOptionModule } from '@angular/material/core';
   ],
   imports: [MatSelectModule, MatOptionModule, RouterModule, ReactiveFormsModule, BrowserModule, AppRoutingModule, FormsModule, HttpClientModule,MonacoEditorModule, BrowserAnimationsModule, MatDialogModule, MatFormFieldModule, MatInputModule],
   providers: [LoginComponent, {
-    provide: MONACO_PATH,
-    useValue: 'https://unpkg.com/monaco-editor@0.36.1/min/vs',
-  },],
+                            provide: MONACO_PATH,
+                            useValue: 'https://unpkg.com/monaco-editor@0.36.1/min/vs',
+                          },
+                          {
+                            provide: HTTP_INTERCEPTORS,
+                            useClass: TokenExpiredInterceptor, 
+                            multi: true
+                          }
+],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

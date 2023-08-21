@@ -1,19 +1,37 @@
 <div  class="relative flex px-6 flex-wrap justify-center flex-col min-w-0 break-words bg-white w-full mb-6 shadow-xl rounded-lg mt-16" style="background-color: rgb(31 41 55);">
   <div class="w-full px-4 flex justify-center">
     <h2 class="text-2xl font-semibold mt-2 text-white font-sans">Script Library</h2>
-  </div>
-
-
-
-
-
-
-
+    <div class="absolute pt-5 pl-[1200px]">
+      <input
+        type="text"
+        placeholder="Search for script/problem"
+        class="border-0 px-3 py-2 h-12 border border-solid border-blueGray-500 placeholder-blueGray-300 text-slate-600 bg-white rounded text-base leading-snug shadow-none outline-none focus:outline-none w-full font-normal"
+        [(ngModel)]="searchTerm" 
+        (input)="performSearch()"
+      />
+    </div>
+    
 
   
+      </div>
+
+
+
+
+
+
+
+
+  <div *ngIf="filteredResults.length === 0">
   <div class="flex justify-center mt-4">
     <button (click)="openAddProblemModal()" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">Add problem</button>
   </div>
   
   <app-post *ngFor="let problem of problems; let i = index" [id]="problem.id"  [title]="problem.title" [solutions]="problem.solutions" [username]="problem.username" (problemDeleted)="onProblemDeleted($event)"></app-post>
+</div>
+<div *ngIf="filteredResults.length > 0" class="flex w-full justify-center mt-[150px]">
+  <ng-container *ngFor="let content of filteredResults; let i = index">
+    <app-post [@fadeInOut] [id]="content.id" [title]="content.title" [solutions]="content.solutions" [username]="content.username" (problemDeleted)="onProblemDeleted($event)"></app-post>
+  </ng-container>
+</div>
 </div>

@@ -24,6 +24,7 @@ import { ProfileComponent } from "./views/profile/profile.component";
 
 import {CrudGeneratorComponent} from './views/admin/dashboard/crud-generator/crud-generator.component';
 import { ScriptLibraryComponent } from "./views/admin/dashboard/script-library/script-library.component";
+import { AuthGuard } from "./views/auth/guard/AuthGuard";
 
 
 
@@ -32,6 +33,7 @@ const routes: Routes = [
   {
     path: "",
     component: AdminComponent,
+    canActivate: [AuthGuard],
     children: [
       { path: "dashboard", component: DashboardComponent },
       { path: "crudGen", component: CrudGeneratorComponent},

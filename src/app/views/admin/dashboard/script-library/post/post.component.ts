@@ -28,22 +28,29 @@ export class PostComponent implements OnInit{
       return b.score - a.score;
     });
   }
-  onSolutionDownvoted($event: number) {
-    const solutionToUpdate = this.solutions.find((solution:any) => solution.id === $event);
+  onSolutionDownvoted($event: any) {
+    const solutionToUpdate = this.solutions.find((solution:any) => solution.id === $event.id);
+    console.log("solution downvoted here=====================", $event);
     if (solutionToUpdate) {
-      solutionToUpdate.score--; // Update the score
+      this.solutions.map((solution:any) => {
+        if (solution.id === $event.id) {
+          solution.upvotingUsers = solution.upvotingUsers.filter((user: any) => {
+            user.id != $event.userDownvotedID
+            console.log(user.id != $event.userDownvotedID);
+          });
+          solutionToUpdate.score--;
+        }
+        console.log("solution upvoting users=====================after update", solution.upvotingUsers);
+      });
     }
-    // this.solutions = this.sortSolutions(this.solutions);
 }
-  onSolutionUpvoted(solutionId: number) {
+  onSolutionUpvoted(solutionId: any) {
 
-    // Find the solution in the solutions array
+    
     const solutionToUpdate = this.solutions.find((solution:any) => solution.id === solutionId);
     if (solutionToUpdate) {
       solutionToUpdate.score++; // Update the score
     }
-    // this.solutions = this.sortSolutions(this.solutions);
-
   }
   trackByFn(index: number, item: any): number {
     return item.id;
@@ -114,10 +121,6 @@ export class PostComponent implements OnInit{
         );
       }
     
-
-
-
-
 
 
 

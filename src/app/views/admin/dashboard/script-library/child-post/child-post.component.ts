@@ -45,10 +45,12 @@ export class ChildPostComponent implements AfterViewInit{
 //   }
 // }
 @Output() solutionUpvoted: EventEmitter<number> = new EventEmitter<number>();
-@Output() solutionDownVoted: EventEmitter<number> = new EventEmitter<number>();
+@Output() solutionDownVoted: EventEmitter<any> = new EventEmitter<any>();
 async thumbsUp() {
   if (!this.currentUserVoted) {
     this.currentUserVoted = true;
+    this.upvotingUsers.push(JSON.parse(localStorage.getItem('auth-user') || '{}'));
+    // this.upvotingUsers.forEach((user: any) => console.log(user.username));
     await this.solutionService.upVoteSolution(this.id).subscribe(
       data => {
         console.log(data);
@@ -62,10 +64,16 @@ async thumbsUp() {
   }
   else if(this.currentUserVoted){
     this.currentUserVoted = false;
+    this.upvotingUsers = this.upvotingUsers.filter((user: any) => JSON.stringify(user.id) !== JSON.stringify(JSON.parse(localStorage.getItem('auth-user') || '{}').id));
+    // this.upvotingUsers.forEach((user: any) => console.log(user.username));
     await this.solutionService.downVoteSolution(this.id).subscribe(
       data => {
         console.log(data);
-        this.solutionDownVoted.emit(this.id);
+        let dataToEmit = {
+          id: this.id,
+          userDownvotedID : JSON.stringify(JSON.parse(localStorage.getItem('auth-user') || '{}').id)
+        }
+        this.solutionDownVoted.emit(dataToEmit);
       },
       err => {
         console.log(err);
